@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Insteadman</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using node.js <script>document.write(process.version)</script>.
+    <div id="files"></div>
+    <script>
+        var markdown = require('markdown').markdown;
+        document.write(markdown.toHTML("Hello11 **World**!"));
+
+        var fs = require('fs');
+        var text = fs.readFileSync('./testfile.txt', 'utf8')
+        document.write(text)
+
+        var glob = require("glob")
+        glob("./*.txt", function (er, files) {
+            var index, len;
+            for (index = 0, len = files.length; index < len; ++index) {
+                document.getElementById('files').innerHTML += files[index] + "; "
+            }
+        })
+    </script>
+  </body>
+</html>
