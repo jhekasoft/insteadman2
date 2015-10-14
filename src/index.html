@@ -12,10 +12,10 @@
         document.write(markdown.toHTML("Hello11 **World**!"));
 
         var fs = require('fs');
-        var text = fs.readFileSync('./testfile.txt', 'utf8')
-        document.write(text)
+        var text = fs.readFileSync('./testfile.txt', 'utf8');
+        document.write(text);
 
-        var glob = require("glob")
+        var glob = require("glob");
         glob("./*.txt", function (er, files) {
             var index, len;
             for (index = 0, len = files.length; index < len; ++index) {
