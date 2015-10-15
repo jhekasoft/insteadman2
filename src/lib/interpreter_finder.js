@@ -9,9 +9,10 @@ class InsteadInterpreterFinder {
 }
 
 class InsteadInterpreterFinderFreeUnix extends InsteadInterpreterFinder {
+
     findInterpreter() {
         return 'Unix';
     }
 }
 
-// module.exports = InsteadInterpreterFinderFreeUnix;
+module.exports.InsteadInterpreterFinderFreeUnix = InsteadInterpreterFinderFreeUnix;

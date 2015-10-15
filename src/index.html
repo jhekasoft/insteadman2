@@ -22,6 +22,10 @@
                 document.getElementById('files').innerHTML += files[index] + "; "
             }
         })
+
+        var interpreterFinder = require('./lib/interpreter_finder');
+        var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderFreeUnix
+        console.log(insteadInterpreterFinder.findInterpreter())
     </script>
   </body>
 </html>
