@@ -24,8 +24,10 @@
         })
 
         var interpreterFinder = require('./lib/interpreter_finder');
-        var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderFreeUnix
-        console.log(insteadInterpreterFinder.findInterpreter())
+        var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderMac
+        var interpreterPath = insteadInterpreterFinder.findInterpreter();
+        console.log(interpreterPath)
+        insteadInterpreterFinder.checkInterpreter(interpreterPath);
     </script>
   </body>
 </html>
