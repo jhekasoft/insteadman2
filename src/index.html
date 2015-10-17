@@ -7,6 +7,7 @@
     <h1>Hello World!</h1>
     We are using node.js <script>document.write(process.version)</script>.
     <div id="files"></div>
+    <div>Version: <span id="interpreter_version">...</span></div>
     <script>
         var markdown = require('markdown').markdown;
         document.write(markdown.toHTML("Hello11 **World**!"));
@@ -19,15 +20,18 @@
         glob("./*.txt", function (er, files) {
             var index, len;
             for (index = 0, len = files.length; index < len; ++index) {
-                document.getElementById('files').innerHTML += files[index] + "; "
+                document.getElementById('files').innerText += files[index] + "; ";
             }
-        })
+        });
 
         var interpreterFinder = require('./lib/interpreter_finder');
-        var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderMac
-        var interpreterPath = insteadInterpreterFinder.findInterpreter();
-        console.log(interpreterPath)
-        insteadInterpreterFinder.checkInterpreter(interpreterPath);
+        var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderMac;
+        insteadInterpreterFinder.findInterpreter(function(interpreterPath) {
+            insteadInterpreterFinder.checkInterpreter(interpreterPath, function(version) {
+                version = version || "not found";
+                document.getElementById('interpreter_version').innerText = version;
+            });
+        });
     </script>
   </body>
 </html>

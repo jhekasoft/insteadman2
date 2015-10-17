@@ -14,16 +14,20 @@ class InsteadInterpreterFinder {
         return this.downloadLink;
     }
 
-    findInterpreter() {
-        var foundPath = false;
+    findInterpreter(callback) {
+        var isFound = false;
         var here = this;
         this.exactFilePaths.forEach(function(path) {
             if (here.checkInterpreterPath(path)) {
-                foundPath = path;
+                isFound = true;
+                callback(path);
+                return false;
             }
         });
 
-        return foundPath;
+        if (!isFound) {
+            callback(false);
+        }
     }
 
     checkInterpreterPath(path) {
@@ -34,9 +38,20 @@ class InsteadInterpreterFinder {
         }
     }
 
-    checkInterpreter(interpreterCommand) {
+    checkInterpreter(interpreterCommand, callback) {
+        //try {
+        //    var result = childProcess.execSync("which ls", {encoding: "ascii"});
+        //    console.log(result);
+        //} catch (err) {
+        //    console.log('fail');
+        //}
+
         childProcess.exec(interpreterCommand + " -version", function(error, stdout, stderr) {
-            console.log([error, stdout, stderr]);
+            if (error) {
+                callback(false);
+            } else {
+                callback(stdout.trim());
+            }
         });
     }
 }
@@ -53,7 +68,35 @@ class InsteadInterpreterFinderMac extends InsteadInterpreterFinder {
 
 class InsteadInterpreterFinderFreeUnix extends InsteadInterpreterFinder {
 
+    // TODO: check
+    findInterpreter(callback) {
+        var interpreterCommand = "instead"
+        childProcess.exec("which " + interpreterCommand, function(error, stdout, stderr) {
+            if (error) {
+                callback(false);
+            } else {
+                callback(interpreterCommand);
+            }
+        });
+    }
+}
 
+class InsteadInterpreterFinderWin extends InsteadInterpreterFinder {
+
+    // TODO: finish and check
+    constructor() {
+        super();
+
+        // mountvol /
+        // [A-Z]+:.*$
+        var drives = ["C:\\", "D:\\"];
+        drives.forEach(function(drive) {
+            this.exactFilePaths.push(drive + "Program Files\\Games\\INSTEAD\\sdl-instead.exe");
+            this.exactFilePaths.push(drive + "Program Files (x86)\\Games\\INSTEAD\\sdl-instead.exe");
+            this.exactFilePaths.push(drive + "Program Files\\INSTEAD\\sdl-instead.exe");
+            this.exactFilePaths.push(drive + "Program Files (x86)\\INSTEAD\\sdl-instead.exe");
+        })
+    }
 }
 
 module.exports.InsteadInterpreterFinderMac = InsteadInterpreterFinderMac;
