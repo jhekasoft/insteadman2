@@ -3,6 +3,7 @@
 var fs = require('fs');
 var childProcess = require('child_process');
 
+// TODO: can find several interpreters
 class InsteadInterpreterFinder {
 
     constructor() {
@@ -101,3 +102,4 @@ class InsteadInterpreterFinderWin extends InsteadInterpreterFinder {
 
 module.exports.InsteadInterpreterFinderMac = InsteadInterpreterFinderMac;
 module.exports.InsteadInterpreterFinderFreeUnix = InsteadInterpreterFinderFreeUnix;
+module.exports.InsteadInterpreterFinderWin = InsteadInterpreterFinderWin;

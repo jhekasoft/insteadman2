@@ -3,7 +3,8 @@
   "version": "2.0.1",
   "main": "index.html",
   "window": {
-    "toolbar": true,
+    "icon": "resources/images/logo.png",
+    "toolbar": false,
     "width": 500,
     "height": 400,
     "resizable": false

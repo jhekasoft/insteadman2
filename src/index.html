@@ -4,11 +4,17 @@
     <title>Insteadman</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
+    <h1>Insteadman</h1>
+    <img src="./resources/images/logo.png" alt="Insteadman">
     We are using node.js <script>document.write(process.version)</script>.
     <div id="files"></div>
     <div>Version: <span id="interpreter_version">...</span></div>
     <script>
+        var gui = require('nw.gui');
+        var mb = new gui.Menu({type:"menubar"});
+        mb.createMacBuiltin("Insteadman");
+        gui.Window.get().menu = mb;
+
         var markdown = require('markdown').markdown;
         document.write(markdown.toHTML("Hello11 **World**!"));
 
