@@ -38,6 +38,9 @@
                 document.getElementById('interpreter_version').innerText = version;
             });
         });
+
+        var configurator = new (require('./lib/configurator').ConfiguratorMac);
+        console.log(configurator.readConfig());
     </script>
   </body>
 </html>

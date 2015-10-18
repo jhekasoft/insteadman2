@@ -11,6 +11,7 @@ In `src` dir:
 nmp install markdown
 nmp install fs
 nmp install glob
+npm install expand-home-dir
 ```
 
 Run in `src` dir:

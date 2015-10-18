@@ -4,7 +4,7 @@
   "main": "index.html",
   "window": {
     "icon": "resources/images/logo.png",
-    "toolbar": false,
+    "toolbar": true,
     "width": 500,
     "height": 400,
     "resizable": false
