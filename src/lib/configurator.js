@@ -79,6 +79,7 @@ class ConfiguratorWin extends Configurator {
     }
 }
 
+module.exports.Configurator = Configurator;
 module.exports.ConfiguratorMac = ConfiguratorMac;
 module.exports.ConfiguratorFreeUnix = ConfiguratorFreeUnix;
 module.exports.ConfiguratorWin = ConfiguratorWin;

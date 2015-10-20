@@ -47,6 +47,8 @@
         if (configurator.save()) {
             console.log("ok");
         }
+
+        var manager = new (require('./lib/manager').ManagerMac)(configurator);
     </script>
   </body>
 </html>
