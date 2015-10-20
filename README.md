@@ -8,9 +8,9 @@ Before
 In `src` dir:
 
 ```
-nmp install markdown
-nmp install fs
-nmp install glob
+npm install markdown
+npm install fs
+npm install glob
 npm install expand-home-dir
 ```
 

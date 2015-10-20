@@ -40,7 +40,13 @@
         });
 
         var configurator = new (require('./lib/configurator').ConfiguratorMac);
-        console.log(configurator.readConfig());
+        console.log(configurator.getValue("lang"));
+        console.log(configurator.getValue("lang1"));
+        configurator.setValue("lang1", "dd");
+        console.log(configurator.getAll());
+        if (configurator.save()) {
+            console.log("ok");
+        }
     </script>
   </body>
 </html>

@@ -23,10 +23,44 @@ class Configurator {
         //}
     }
 
-    readConfig() {
-        var config = fs.readFileSync(this.getConfigFullPath(), 'utf8');
-        this.configData = JSON.parse(config);
+    read() {
+        var configRaw = fs.readFileSync(this.getConfigFullPath(), 'utf8');
+        this.configData = JSON.parse(configRaw);
         return this.configData;
+    }
+
+    getAll() {
+        if (0 == Object.keys(this.configData).length) {
+            this.read();
+        }
+
+        return this.configData;
+    }
+
+    getValue(name) {
+        var config = this.getAll();
+        if (typeof config[name] !== 'undefined') {
+            return null;
+        }
+
+        return config[name];
+    }
+
+    setValue(name, value) {
+        // Read config if it empty
+        this.getAll();
+
+        this.configData[name] = value;
+    }
+
+    save() {
+        var configRaw = JSON.stringify(this.configData, null, '  ');
+        try {
+            fs.writeFileSync(this.getConfigFullPath(), configRaw, 'utf8');
+            return true;
+        } catch (err) {
+            return false;
+        }
     }
 }
 
