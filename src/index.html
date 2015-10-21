@@ -15,40 +15,41 @@
         mb.createMacBuiltin("Insteadman");
         gui.Window.get().menu = mb;
 
-        var markdown = require('markdown').markdown;
-        document.write(markdown.toHTML("Hello11 **World**!"));
-
-        var fs = require('fs');
-        var text = fs.readFileSync('./testfile.txt', 'utf8');
-        document.write(text);
-
-        var glob = require("glob");
-        glob("./*.txt", function (er, files) {
-            var index, len;
-            for (index = 0, len = files.length; index < len; ++index) {
-                document.getElementById('files').innerText += files[index] + "; ";
-            }
-        });
+//        var markdown = require('markdown').markdown;
+//        document.write(markdown.toHTML("Hello11 **World**!"));
+//
+//        var fs = require('fs');
+//        var text = fs.readFileSync('./testfile.txt', 'utf8');
+//        document.write(text);
+//
+//        var glob = require("glob");
+//        glob("./*.txt", function (er, files) {
+//            var index, len;
+//            for (index = 0, len = files.length; index < len; ++index) {
+//                document.getElementById('files').innerText += files[index] + "; ";
+//            }
+//        });
 
         var interpreterFinder = require('./lib/interpreter_finder');
         var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderMac;
-        insteadInterpreterFinder.findInterpreter(function(interpreterPath) {
-            insteadInterpreterFinder.checkInterpreter(interpreterPath, function(version) {
-                version = version || "not found";
-                document.getElementById('interpreter_version').innerText = version;
-            });
-        });
+//        insteadInterpreterFinder.findInterpreter(function(interpreterPath) {
+//            insteadInterpreterFinder.checkInterpreter(interpreterPath, function(version) {
+//                version = version || "not found";
+//                document.getElementById('interpreter_version').innerText = version;
+//            });
+//        });
 
         var configurator = new (require('./lib/configurator').ConfiguratorMac);
-        console.log(configurator.getValue("lang"));
-        console.log(configurator.getValue("lang1"));
-        configurator.setValue("lang1", "dd");
-        console.log(configurator.getAll());
-        if (configurator.save()) {
-            console.log("ok");
-        }
+//        console.log(configurator.getValue("lang"));
+//        console.log(configurator.getValue("lang1"));
+//        configurator.setValue("lang1", "dd");
+//        console.log(configurator.getAll());
+//        if (configurator.save()) {
+//            console.log("ok");
+//        }
 
         var manager = new (require('./lib/manager').ManagerMac)(configurator);
+        manager.updateRepositories();
     </script>
   </body>
 </html>

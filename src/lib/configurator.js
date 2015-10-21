@@ -8,23 +8,33 @@ class Configurator {
         this.configPath = "~/.instead/manager/";
         this.configFilename = "instead-manager-settings.json";
         this.configData = {};
+
+        this.configFilePath = null;
+        this.repositoriesPath = null;
+        this.updateBasePaths();
     }
 
-    getConfigFullPath() {
-        return expandHomeDir(this.configPath + this.configFilename);
+    updateBasePaths() {
+        var expandedConfigPath = expandHomeDir(this.configPath);
+        this.configFilePath = expandedConfigPath + this.configFilename;
+        this.repositoriesPath = expandedConfigPath + "repositories/"
+    }
+
+    getRepositoriesPath() {
+        return this.repositoriesPath;
     }
 
     checkAndCreateConfigFile() {
         // TODO: create recursive dir, copy skeleton config, write default settings
         //try {
-        //    return fs.statSync(this.getConfigFullPath()).isFile();
+        //    return fs.statSync(this.configFilePath).isFile();
         //} catch (err) {
         //    fs.
         //}
     }
 
     read() {
-        var configRaw = fs.readFileSync(this.getConfigFullPath(), 'utf8');
+        var configRaw = fs.readFileSync(this.configFilePath, 'utf8');
         this.configData = JSON.parse(configRaw);
         return this.configData;
     }
@@ -39,11 +49,27 @@ class Configurator {
 
     getValue(name) {
         var config = this.getAll();
-        if (typeof config[name] !== 'undefined') {
+        if (typeof config[name] === 'undefined') {
             return null;
         }
 
         return config[name];
+    }
+
+    getRepositories() {
+        return this.getValue("repositories");
+    }
+
+    getLang() {
+        return this.getValue("lang");
+    }
+
+    getInterpreterCommand() {
+        return this.getValue("interpreter_path");
+    }
+
+    getGamePath() {
+        return this.getValue("game_path");
     }
 
     setValue(name, value) {
@@ -56,7 +82,7 @@ class Configurator {
     save() {
         var configRaw = JSON.stringify(this.configData, null, '  ');
         try {
-            fs.writeFileSync(this.getConfigFullPath(), configRaw, 'utf8');
+            fs.writeFileSync(this.configFilePath, configRaw, 'utf8');
             return true;
         } catch (err) {
             return false;

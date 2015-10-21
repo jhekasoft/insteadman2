@@ -8,10 +8,7 @@ Before
 In `src` dir:
 
 ```
-npm install markdown
-npm install fs
-npm install glob
-npm install expand-home-dir
+npm install markdown fs glob expand-home-dir status-bar follow-redirects
 ```
 
 Run in `src` dir:
