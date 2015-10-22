@@ -2,9 +2,12 @@
 
 var fs = require('fs');
 var path = require('path');
+var glob = require("glob");
 var http = require('follow-redirects').http;
 var statusBar = require('status-bar');
+var xml2js = require('xml2js');
 var configuratorClass = require('./configurator').Configurator
+var gameClass = require('./models').Game
 
 class Manager {
     constructor(configurator) {
@@ -15,8 +18,7 @@ class Manager {
     }
 
     getRepositoryFiles() {
-
-
+        return glob.sync(this.configurator.getRepositoriesPath() + "*.xml");
     }
 
     xmlGameParseLanguages(game) {
@@ -24,12 +26,27 @@ class Manager {
     }
 
     getGamesFromFile(filePath) {
-        // this.xmlGameParseLanguages();
+        // TODO: this.xmlGameParseLanguages();
+
+        var parser = new xml2js.Parser();
+        fs.readFile(filePath, function(err, data) {
+            parser.parseString(data, function (err, result) {
+                console.dir(result);
+                console.log('Done');
+            });
+        });
+
+        return null;
     }
 
     getGameList() {
-        // this.getRepositoryFiles();
-        // this.getGamesFromFile();
+        var gameList = [];
+
+        var parser = new xml2js.Parser();
+        var here = this;
+        this.getRepositoryFiles().forEach(function(file) {
+           console.log(here.getGamesFromFile(file));
+        });
     }
 
     getSortedGameList() {

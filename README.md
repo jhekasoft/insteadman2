@@ -8,7 +8,7 @@ Before
 In `src` dir:
 
 ```
-npm install markdown fs glob expand-home-dir status-bar follow-redirects
+npm install markdown fs glob expand-home-dir status-bar follow-redirects xml2js
 ```
 
 Run in `src` dir:
