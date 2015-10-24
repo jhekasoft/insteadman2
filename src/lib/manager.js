@@ -28,25 +28,28 @@ class Manager {
     getGamesFromFile(filePath) {
         // TODO: this.xmlGameParseLanguages();
 
+        var games = [];
+        var data = fs.readFileSync(filePath);
         var parser = new xml2js.Parser();
-        fs.readFile(filePath, function(err, data) {
-            parser.parseString(data, function (err, result) {
-                console.dir(result);
-                console.log('Done');
+        parser.parseString(data, function (err, result) {
+            result.game_list.game.forEach(function (xmlGame) {
+                var game = new gameClass();
+                game.hydrateFromXml(xmlGame, path.basename(filePath))
+                games.push(game);
             });
         });
 
-        return null;
+        return games;
     }
 
     getGameList() {
         var gameList = [];
-
-        var parser = new xml2js.Parser();
         var here = this;
         this.getRepositoryFiles().forEach(function(file) {
-           console.log(here.getGamesFromFile(file));
+            gameList = gameList.concat(here.getGamesFromFile(file));
         });
+
+        return gameList;
     }
 
     getSortedGameList() {
