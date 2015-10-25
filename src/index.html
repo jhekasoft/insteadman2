@@ -2,33 +2,24 @@
 <html>
   <head>
     <title>Insteadman</title>
+      <script src="./vendor/jquery/jquery-2.1.4.min.js"></script>
   </head>
   <body>
     <h1>Insteadman</h1>
     <img src="./resources/images/logo.png" alt="Insteadman">
-    We are using node.js <script>document.write(process.version)</script>.
-    <div id="files"></div>
-    <div>Version: <span id="interpreter_version">...</span></div>
+    <table id="games_list">
+        <tr>
+            <th>Title</th>
+            <th>Version</th>
+            <th>Size</th>
+        </tr>
+    </table>
+
     <script>
         var gui = require('nw.gui');
         var mb = new gui.Menu({type:"menubar"});
         mb.createMacBuiltin("Insteadman");
         gui.Window.get().menu = mb;
-
-//        var markdown = require('markdown').markdown;
-//        document.write(markdown.toHTML("Hello11 **World**!"));
-//
-//        var fs = require('fs');
-//        var text = fs.readFileSync('./testfile.txt', 'utf8');
-//        document.write(text);
-//
-//        var glob = require("glob");
-//        glob("./*.txt", function (er, files) {
-//            var index, len;
-//            for (index = 0, len = files.length; index < len; ++index) {
-//                document.getElementById('files').innerText += files[index] + "; ";
-//            }
-//        });
 
         var interpreterFinder = require('./lib/interpreter_finder');
         var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderMac;
@@ -48,9 +39,17 @@
 //            console.log("ok");
 //        }
 
+        var statusBar = require('status-bar');
+        var bar = statusBar.create({ total: 0 })
+        //barformatter = new statusBar.Formatter(statusBar);
+
         var manager = new (require('./lib/manager').ManagerMac)(configurator);
 //        manager.updateRepositories();
-        console.log(manager.getGameList());
+        var gamesHtml = '';
+        manager.getGameList().forEach(function (game) {
+            gamesHtml += '<tr><td>' + game.title + '</td><td>' + game.version + '</td><td>' + bar.format.storage(game.size) + '</td></tr>';
+        })
+        $('#games_list').append(gamesHtml);
     </script>
   </body>
 </html>

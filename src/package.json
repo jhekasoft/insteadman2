@@ -7,6 +7,6 @@
     "toolbar": true,
     "width": 500,
     "height": 400,
-    "resizable": false
+    "resizable": true
   }
 }
