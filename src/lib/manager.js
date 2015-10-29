@@ -53,7 +53,10 @@ class Manager {
     }
 
     getSortedGameList() {
-        // this.getGameList();
+        return this.getGameList().sort(function (gameA, gameB) {
+            if (gameA.title == gameB.title) return 0;
+            if (gameA.title > gameB.title) return 1; else return -1;
+        });
     }
 
     getLocalGameList() {

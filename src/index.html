@@ -5,8 +5,11 @@
       <script src="./vendor/jquery/jquery-2.1.4.min.js"></script>
   </head>
   <body>
-    <h1>Insteadman</h1>
-    <img src="./resources/images/logo.png" alt="Insteadman">
+    <div id="game_block" data-game_id="">
+        <h2 id="game_title">Insteadman</h2>
+        <img src="./resources/images/logo.png" alt="Insteadman">
+    </div>
+
     <table id="games_list">
         <tr>
             <th>Title</th>
@@ -46,10 +49,18 @@
         var manager = new (require('./lib/manager').ManagerMac)(configurator);
 //        manager.updateRepositories();
         var gamesHtml = '';
-        manager.getGameList().forEach(function (game) {
-            gamesHtml += '<tr><td>' + game.title + '</td><td>' + game.version + '</td><td>' + bar.format.storage(game.size) + '</td></tr>';
-        })
+        var globalGamesList = manager.getSortedGameList();
+        globalGamesList.forEach(function (game, id) {
+            gamesHtml += '<tr class="games_list_item" data-id="' + id + '"><td>' + game.title + '</td><td>' + game.version + '</td><td>' + bar.format.storage(game.size) + '</td></tr>';
+        });
         $('#games_list').append(gamesHtml);
+
+        $('.games_list_item').click(function () {
+            var gameId = $(this).data('id');
+            var game = globalGamesList[gameId];
+            $('#game_block').data('game_id', gameId);
+            $('#game_title').text(game.title);
+        });
     </script>
   </body>
 </html>
