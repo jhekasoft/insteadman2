@@ -65,7 +65,7 @@ class Configurator {
     }
 
     getInterpreterCommand() {
-        return this.getValue("interpreter_path");
+        return this.getValue("interpreter_command");
     }
 
     getGamePath() {

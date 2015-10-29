@@ -6,6 +6,7 @@ var glob = require("glob");
 var http = require('follow-redirects').http;
 var statusBar = require('status-bar');
 var xml2js = require('xml2js');
+var childProcess = require('child_process');
 var configuratorClass = require('./configurator').Configurator
 var gameClass = require('./models').Game
 
@@ -140,12 +141,24 @@ class Manager {
         // this.executeInstallGameCommand();
     }
 
-    executeRunGameCommand(gameName) {
-
+    executeRunGameCommand(gameName, callback) {
+        var interpreterCommand = this.configurator.getInterpreterCommand();
+        var command = interpreterCommand + ' -game "' + gameName + '"';
+        console.log(command);
+        childProcess.exec(command, function(error, stdout, stderr) {
+            if (error) {
+                if (callback) callback(false);
+            } else {
+                if (callback) callback(stdout.trim());
+            }
+        });
     }
 
-    runGame(name) {
-        // this.executeRunGameCommand();
+    runGame(game) {
+        var runningGameName = game.name;
+        // TODO: idf check and change runningGameName
+
+        this.executeRunGameCommand(runningGameName);
     }
 
     deleteGame(name) {

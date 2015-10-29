@@ -8,6 +8,7 @@
     <div id="game_block" data-game_id="">
         <h2 id="game_title">Insteadman</h2>
         <img src="./resources/images/logo.png" alt="Insteadman">
+        <button id="game_run">Run</button>
     </div>
 
     <table id="games_list">
@@ -60,6 +61,12 @@
             var game = globalGamesList[gameId];
             $('#game_block').data('game_id', gameId);
             $('#game_title').text(game.title);
+        });
+
+        $('#game_run').click(function () {
+            var gameId = $(this).parent('#game_block').data('game_id');
+            var game = globalGamesList[gameId];
+            manager.runGame(game);
         });
     </script>
   </body>
