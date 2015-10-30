@@ -68,8 +68,13 @@ class Configurator {
         return this.getValue("interpreter_command");
     }
 
-    getGamePath() {
-        return this.getValue("game_path");
+    getGamesPath(expanded) {
+        expanded = expanded || false;
+        var gamePath = this.getValue("games_path");
+        if (expanded) {
+            return expandHomeDir(gamePath);
+        }
+        return gamePath;
     }
 
     setValue(name, value) {

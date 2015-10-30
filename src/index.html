@@ -8,7 +8,8 @@
     <div id="game_block" data-game_id="">
         <h2 id="game_title">Insteadman</h2>
         <img src="./resources/images/logo.png" alt="Insteadman">
-        <button id="game_run">Run</button>
+        <button id="game_run" style="display: none;">Run</button>
+        <button id="game_install" style="display: none;">Install</button>
     </div>
 
     <table id="games_list">
@@ -50,9 +51,13 @@
         var manager = new (require('./lib/manager').ManagerMac)(configurator);
 //        manager.updateRepositories();
         var gamesHtml = '';
-        var globalGamesList = manager.getSortedGameList();
+        var globalGamesList = manager.getSortedCombinedGameList();
         globalGamesList.forEach(function (game, id) {
-            gamesHtml += '<tr class="games_list_item" data-id="' + id + '"><td>' + game.title + '</td><td>' + game.version + '</td><td>' + bar.format.storage(game.size) + '</td></tr>';
+            var gameTitle = game.title;
+            if (game.installed) {
+                gameTitle = '<strong>' + gameTitle + '</strong>';
+            }
+            gamesHtml += '<tr class="games_list_item" data-id="' + id + '"><td>' + gameTitle + '</td><td>' + game.version + '</td><td>' + bar.format.storage(game.size) + '</td></tr>';
         });
         $('#games_list').append(gamesHtml);
 
@@ -61,6 +66,14 @@
             var game = globalGamesList[gameId];
             $('#game_block').data('game_id', gameId);
             $('#game_title').text(game.title);
+
+            if (game.installed) {
+                $('#game_install').hide();
+                $('#game_run').show();
+            } else {
+                $('#game_install').show();
+                $('#game_run').hide();
+            }
         });
 
         $('#game_run').click(function () {

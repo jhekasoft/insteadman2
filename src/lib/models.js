@@ -12,6 +12,7 @@ class Game {
         this.descurl = null;
         this.repositoryFilename = null;
         this.installed = false;
+        this.onlyLocal = false;
     }
 
     // TODO: move to other place
@@ -25,7 +26,6 @@ class Game {
         this.size = xmlGame.size[0];
         this.descurl = xmlGame.descurl[0];
         this.repositoryFilename = repositoryFilename;
-        this.installed = false;
     }
 }
 

@@ -35,7 +35,7 @@ class Manager {
         parser.parseString(data, function (err, result) {
             result.game_list.game.forEach(function (xmlGame) {
                 var game = new gameClass();
-                game.hydrateFromXml(xmlGame, path.basename(filePath))
+                game.hydrateFromXml(xmlGame, path.basename(filePath));
                 games.push(game);
             });
         });
@@ -54,27 +54,62 @@ class Manager {
     }
 
     getSortedGameList() {
-        return this.getGameList().sort(function (gameA, gameB) {
-            if (gameA.title == gameB.title) return 0;
-            if (gameA.title > gameB.title) return 1; else return -1;
-        });
+        return this.getGameList().sort(this.sortingCompareGameByTitle);
+    }
+
+    sortingCompareGameByTitle(gameA, gameB) {
+        if (gameA.title == gameB.title) return 0;
+        if (gameA.title > gameB.title) return 1; else return -1;
     }
 
     getLocalGameList() {
+        var files = glob.sync(this.configurator.getGamesPath(true) + "*");
+        var gameList = [];
+        files.forEach(function (gameFile) {
+            var game = new gameClass();
+            // TODO: idf
+            game.name = path.basename(gameFile);
+            game.title = game.name;
+            game.installed = true;
+            gameList.push(game);
+        });
 
+        return gameList;
     }
 
     getSortedLocalGameList() {
-        // this.getLocalGameList();
+        return this.getLocalGameList().sort(this.sortingCompareGameByTitle);
     }
 
     getCombinedGameList() {
-        // this.getSortedGameList();
-        // this.getSortedLocalGameList();
+        var gameList = this.getGameList();
+        var localGameList = this.getLocalGameList();
+        //var onlyLocalGameName = [];
+
+        localGameList.forEach(function (localGame) {
+            localGame.onlyLocal = true;
+        });
+
+        gameList.forEach(function (game) {
+            localGameList.forEach(function (localGame) {
+                if (game.name == localGame.name) {
+                    game.installed = true;
+                    localGame.onlyLocal = false;
+                }
+            });
+        });
+
+        localGameList.forEach(function (localGame) {
+            if (localGame.onlyLocal) {
+                gameList.push(localGame);
+            }
+        });
+
+        return gameList;
     }
 
     getSortedCombinedGameList() {
-        // this.getCombinedGameList();
+        return this.getCombinedGameList().sort(this.sortingCompareGameByTitle);
     }
 
     getGamelistRepositories(gameList) {
