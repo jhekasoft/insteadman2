@@ -1,6 +1,14 @@
 {
   "name": "insteadman",
   "version": "2.0.1",
+  "description": "Manager for INSTEAD interpreter",
+  "author": "Evgeniy Efremov aka jhekasoft <jhekasoft@gmail.com>",
+  "homepage": "http://instead.club",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jhekasoft/insteadman.git"
+  },
   "main": "index.html",
   "window": {
     "icon": "resources/images/logo.png",
@@ -8,5 +16,14 @@
     "width": 500,
     "height": 400,
     "resizable": true
-  }
+  },
+  "dependencies": {
+    "fs": "*",
+    "glob": "*",
+    "expand-home-dir": "*",
+    "status-bar": "*",
+    "follow-redirects": "*",
+    "xml2js": "*"
+  },
+  "readme": "../README.md"
 }
