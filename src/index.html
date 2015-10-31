@@ -7,9 +7,10 @@
   <body>
     <div id="game_block" data-game_id="">
         <h2 id="game_title">Insteadman</h2>
-        <img src="./resources/images/logo.png" alt="Insteadman">
+        <img id="game_logo" src="./resources/images/logo.png" alt="Insteadman">
         <button id="game_run" style="display: none;">Run</button>
         <button id="game_install" style="display: none;">Install</button>
+        <button id="game_delete" style="display: none;">Delete</button>
     </div>
 
     <table id="games_list">
@@ -49,17 +50,28 @@
         //barformatter = new statusBar.Formatter(statusBar);
 
         var manager = new (require('./lib/manager').ManagerMac)(configurator);
+
 //        manager.updateRepositories();
-        var gamesHtml = '';
-        var globalGamesList = manager.getSortedCombinedGameList();
-        globalGamesList.forEach(function (game, id) {
-            var gameTitle = game.title;
-            if (game.installed) {
-                gameTitle = '<strong>' + gameTitle + '</strong>';
-            }
-            gamesHtml += '<tr class="games_list_item" data-id="' + id + '"><td>' + gameTitle + '</td><td>' + game.version + '</td><td>' + bar.format.storage(game.size) + '</td></tr>';
-        });
-        $('#games_list').append(gamesHtml);
+        var globalGamesList = [];
+
+        function render() {
+            globalGamesList = manager.getSortedCombinedGameList();
+
+            $('#games_list .games_list_item').remove();
+
+            var gamesHtml = '';
+
+            globalGamesList.forEach(function (game, id) {
+                var gameTitle = game.title;
+                if (game.installed) {
+                    gameTitle = '<strong>' + gameTitle + '</strong>';
+                }
+                gamesHtml += '<tr class="games_list_item" data-id="' + id + '"><td>' + gameTitle + '</td><td>' + game.version + '</td><td>' + bar.format.storage(game.size) + '</td></tr>';
+            });
+            $('#games_list').append(gamesHtml);
+        }
+
+        render();
 
         $('.games_list_item').click(function () {
             var gameId = $(this).data('id');
@@ -70,9 +82,11 @@
             if (game.installed) {
                 $('#game_install').hide();
                 $('#game_run').show();
+                $('#game_delete').show();
             } else {
                 $('#game_install').show();
                 $('#game_run').hide();
+                $('#game_delete').hide();
             }
         });
 
@@ -81,6 +95,18 @@
             var game = globalGamesList[gameId];
             manager.runGame(game);
         });
+
+        $('#game_delete').click(function () {
+            var gameId = $(this).parent('#game_block').data('game_id');
+            var game = globalGamesList[gameId];
+            manager.deleteGame(game, function() {
+                render();
+            });
+        });
+
+//        $('#game_logo').click(function () {
+//            $('#games_list .games_list_item').remove();
+//        });
     </script>
   </body>
 </html>

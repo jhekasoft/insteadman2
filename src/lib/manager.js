@@ -58,8 +58,10 @@ class Manager {
     }
 
     sortingCompareGameByTitle(gameA, gameB) {
-        if (gameA.title == gameB.title) return 0;
-        if (gameA.title > gameB.title) return 1; else return -1;
+        var titleA = gameA.title.toLowerCase();
+        var titleB = gameB.title.toLowerCase();
+        if (titleA == titleB) return 0;
+        if (titleA > titleB) return 1; else return -1;
     }
 
     getLocalGameList() {
@@ -196,8 +198,38 @@ class Manager {
         this.executeRunGameCommand(runningGameName);
     }
 
-    deleteGame(name) {
+    deleteFolder(dir) {
+        // https://gist.github.com/tkihira/2367067
+        var list = fs.readdirSync(dir);
+        for (var i = 0; i < list.length; i++) {
+            var filename = path.join(dir, list[i]);
+            var stat = fs.statSync(filename);
 
+            if (filename == "." || filename == "..") {
+                // pass these files
+            } else if (stat.isDirectory()) {
+                // rmdir recursively
+                this.deleteFolder(filename);
+            } else {
+                // rm fiilename
+                fs.unlinkSync(filename);
+            }
+        }
+        fs.rmdirSync(dir);
+    };
+
+    deleteGame(game, callback) {
+        var gameFolderPath = this.configurator.getGamesPath(true) + game.name;
+        var gameIdfPath    = this.configurator.getGamesPath(true) + game.name + ".idf";
+
+        if (fs.existsSync(gameFolderPath)) {
+            this.deleteFolder(gameFolderPath);
+        }
+        if (fs.existsSync(gameIdfPath)) {
+            fs.unlinkSync(gameIdfPath);
+        }
+
+        if (callback) callback(game);
     }
 }
 
