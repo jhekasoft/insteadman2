@@ -69,44 +69,40 @@
                 gamesHtml += '<tr class="games_list_item" data-id="' + id + '"><td>' + gameTitle + '</td><td>' + game.version + '</td><td>' + bar.format.storage(game.size) + '</td></tr>';
             });
             $('#games_list').append(gamesHtml);
+
+            $('.games_list_item').click(function () {
+                var gameId = $(this).data('id');
+                var game = globalGamesList[gameId];
+                $('#game_block').data('game_id', gameId);
+                $('#game_title').text(game.title);
+
+                if (game.installed) {
+                    $('#game_install').hide();
+                    $('#game_run').show();
+                    $('#game_delete').show();
+                } else {
+                    $('#game_install').show();
+                    $('#game_run').hide();
+                    $('#game_delete').hide();
+                }
+            });
+
+            $('#game_run').click(function () {
+                var gameId = $(this).parent('#game_block').data('game_id');
+                var game = globalGamesList[gameId];
+                manager.runGame(game);
+            });
+
+            $('#game_delete').click(function () {
+                var gameId = $(this).parent('#game_block').data('game_id');
+                var game = globalGamesList[gameId];
+                manager.deleteGame(game, function() {
+                    render();
+                });
+            });
         }
 
         render();
-
-        $('.games_list_item').click(function () {
-            var gameId = $(this).data('id');
-            var game = globalGamesList[gameId];
-            $('#game_block').data('game_id', gameId);
-            $('#game_title').text(game.title);
-
-            if (game.installed) {
-                $('#game_install').hide();
-                $('#game_run').show();
-                $('#game_delete').show();
-            } else {
-                $('#game_install').show();
-                $('#game_run').hide();
-                $('#game_delete').hide();
-            }
-        });
-
-        $('#game_run').click(function () {
-            var gameId = $(this).parent('#game_block').data('game_id');
-            var game = globalGamesList[gameId];
-            manager.runGame(game);
-        });
-
-        $('#game_delete').click(function () {
-            var gameId = $(this).parent('#game_block').data('game_id');
-            var game = globalGamesList[gameId];
-            manager.deleteGame(game, function() {
-                render();
-            });
-        });
-
-//        $('#game_logo').click(function () {
-//            $('#games_list .games_list_item').remove();
-//        });
     </script>
   </body>
 </html>
