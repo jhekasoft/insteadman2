@@ -11,17 +11,23 @@ class Configurator {
 
         this.configFilePath = null;
         this.repositoriesPath = null;
+        this.tempGamePath = null;
         this.updateBasePaths();
     }
 
     updateBasePaths() {
         var expandedConfigPath = expandHomeDir(this.configPath);
         this.configFilePath = expandedConfigPath + this.configFilename;
-        this.repositoriesPath = expandedConfigPath + "repositories/"
+        this.repositoriesPath = expandedConfigPath + "repositories/";
+        this.tempGamePath = expandedConfigPath + "games/";
     }
 
     getRepositoriesPath() {
         return this.repositoriesPath;
+    }
+
+    getTempGamePath() {
+        return this.tempGamePath;
     }
 
     checkAndCreateConfigFile() {
@@ -29,6 +35,7 @@ class Configurator {
         //try {
         //    return fs.statSync(this.configFilePath).isFile();
         //} catch (err) {
+        //    this.checkAndCreateDirectory();
         //    fs.
         //}
     }
@@ -68,13 +75,8 @@ class Configurator {
         return this.getValue("interpreter_command");
     }
 
-    getGamesPath(expanded) {
-        expanded = expanded || false;
-        var gamePath = this.getValue("games_path");
-        if (expanded) {
-            return expandHomeDir(gamePath);
-        }
-        return gamePath;
+    getGamesPath() {
+        return expandHomeDir(this.getValue("games_path"))
     }
 
     setValue(name, value) {
@@ -91,6 +93,13 @@ class Configurator {
             return true;
         } catch (err) {
             return false;
+        }
+    }
+
+    checkAndCreateDirectory(path) {
+        var stat = fs.statSync(path);
+        if (!stat.isDirectory()) {
+            fs.mkdirSync(path);
         }
     }
 }

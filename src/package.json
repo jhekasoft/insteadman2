@@ -23,7 +23,8 @@
     "expand-home-dir": "*",
     "status-bar": "*",
     "follow-redirects": "*",
-    "xml2js": "*"
+    "xml2js": "*",
+    "fs-extra": "*"
   },
   "readme": "../README.md"
 }

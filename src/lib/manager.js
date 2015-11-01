@@ -1,14 +1,14 @@
 "use strict";
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 var glob = require("glob");
 var http = require('follow-redirects').http;
 var statusBar = require('status-bar');
 var xml2js = require('xml2js');
 var childProcess = require('child_process');
-var configuratorClass = require('./configurator').Configurator
-var gameClass = require('./models').Game
+var configuratorClass = require('./configurator').Configurator;
+var gameClass = require('./models').Game;
 
 class Manager {
     constructor(configurator) {
@@ -65,7 +65,7 @@ class Manager {
     }
 
     getLocalGameList() {
-        var files = glob.sync(this.configurator.getGamesPath(true) + "*");
+        var files = glob.sync(this.configurator.getGamesPath() + "*");
         var gameList = [];
         files.forEach(function (gameFile) {
             var game = new gameClass();
@@ -136,7 +136,7 @@ class Manager {
             console.log(url);
             http.get(url, function (res) {
                 var total = res.headers['content-length'] || 0;
-                bar = statusBar.create({ total: total })
+                bar = statusBar.create({total: total})
                     .on('render', function (stats) {
                         process.stdout.write(
                             filename + ' ' +
@@ -170,18 +170,74 @@ class Manager {
         });
     }
 
-    executeInstallGameCommand(gameName) {
-
+    executeInstallGameCommand(gameFilepath, callback) {
+        var interpreterCommand = this.configurator.getInterpreterCommand();
+        var command = '"' + interpreterCommand + '" -install "' + gameFilepath + '" -quit';
+        console.log(command);
+        childProcess.exec(command, function(error, stdout, stderr) {
+            if (error) {
+                if (callback) callback(false);
+            } else {
+                if (callback) callback(stdout.trim());
+            }
+        });
     }
 
-    installGame(game) {
+    installGame(game, downloadStatusCallback, beginInstallationCallback, endInstallationCallback) {
+        var tempGamePath = this.configurator.getTempGamePath();
+        this.configurator.checkAndCreateDirectory(tempGamePath);
+        var tempPartGameFilepath = tempGamePath + 'tmp_' + game.name + '.part';
+        var tempGameFilepath = tempGamePath + path.basename(game.url);
+
+        var url = game.url;
+        var bar;
+        var file = fs.createWriteStream(tempPartGameFilepath);
+        var here = this;
+        http.get(url, function (res) {
+            console.log(res);
+            var total = res.headers['content-length'] || 0;
+            console.log('total: ' + total);
+            // TODO: try res.headers['content-disposition'] for filename
+            // tempGameFilepath = ;
+            bar = statusBar.create({total: total})
+                .on('render', function (stats) {
+                    downloadStatusCallback(game, {
+                        percents: stats.percentage,
+                        totalSize: stats.totalSize,
+                        currentSize: stats.currentSize,
+                        speed: stats.speed
+                    });
+                });
+
+            res.pipe(bar);
+            res.pipe(file);
+
+            file.on('finish', function () {
+                file.close(function() {
+                    fs.move(tempPartGameFilepath, tempGameFilepath, {clobber: true}, function (err) {
+                        if (err) return endInstallationCallback(false, err);
+                        beginInstallationCallback(game);
+                        here.executeInstallGameCommand(tempGameFilepath, function () {
+                            fs.unlink(tempGameFilepath);
+                            endInstallationCallback(game);
+                        });
+                    })
+                });
+            });
+        }).on('error', function (err) {
+            downloadStatusCallback(game, false);
+            fs.unlink(tempPartGameFilepath);
+            if (bar) bar.cancel();
+            console.error(err);
+        });
+
         // this.executeInstallGameCommand();
     }
 
     executeRunGameCommand(gameName, callback) {
         var interpreterCommand = this.configurator.getInterpreterCommand();
-        var command = interpreterCommand + ' -game "' + gameName + '"';
-        console.log(command);
+        var command = '"' + interpreterCommand + '" -game "' + gameName + '"';
+
         childProcess.exec(command, function(error, stdout, stderr) {
             if (error) {
                 if (callback) callback(false);
@@ -219,8 +275,8 @@ class Manager {
     };
 
     deleteGame(game, callback) {
-        var gameFolderPath = this.configurator.getGamesPath(true) + game.name;
-        var gameIdfPath    = this.configurator.getGamesPath(true) + game.name + ".idf";
+        var gameFolderPath = this.configurator.getGamesPath() + game.name;
+        var gameIdfPath    = this.configurator.getGamesPath() + game.name + ".idf";
 
         if (fs.existsSync(gameFolderPath)) {
             this.deleteFolder(gameFolderPath);
