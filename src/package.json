@@ -13,8 +13,8 @@
   "window": {
     "icon": "resources/images/logo.png",
     "toolbar": true,
-    "width": 500,
-    "height": 400,
+    "width": 760,
+    "height": 460,
     "resizable": true
   },
   "dependencies": {
@@ -24,7 +24,9 @@
     "status-bar": "*",
     "follow-redirects": "*",
     "xml2js": "*",
-    "fs-extra": "*"
+    "fs-extra": "*",
+    "jquery": "2.x",
+    "bootstrap": "3.x"
   },
   "readme": "../README.md"
 }

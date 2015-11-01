@@ -1,151 +1,192 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Insteadman</title>
-      <script src="./vendor/jquery/jquery-2.1.4.min.js"></script>
-  </head>
-  <body>
-    <button id="repository_update">Update repositories</button>
-    <div id="game_block" data-game_id="">
-        <h2 id="game_title">Insteadman</h2>
-        <img id="game_logo" src="./resources/images/logo.png" alt="Insteadman">
-        <button id="game_run" style="display: none;">Run</button>
-        <button id="game_install" style="display: none;">Install</button>
-        <button id="game_delete" style="display: none;">Delete</button>
-    </div>
+    <head>
+        <title>Insteadman</title>
+        <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./style/main.css">
+        <script>
+            window.$ = window.jQuery = global.jQuery = require('jquery');
+            global.document = document;
+            require('bootstrap');
+        </script>
 
-    <table id="games_list">
-        <tr>
-            <th>Title</th>
-            <th>Version</th>
-            <th>Size</th>
-        </tr>
-    </table>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-8">
+                    <table id="games_list" class="table table-condensed table-hover">
+                        <tr>
+                            <th>Title</th>
+                            <th>Version</th>
+                            <th>Size</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-xs-4">
+                    <button id="repository_update" class="btn btn-default">Update repositories</button>
+                    <div id="game_block" data-game_id="">
+                        <h2 id="game_title">Insteadman</h2>
+                        <div>
+                            <p><img id="game_logo" src="./resources/images/logo.png" alt="Insteadman"></p>
+                        </div>
+                        <div>
+                            <button id="game_install" class="btn btn-primary" style="display: none;">Install</button>
+                            <button id="game_run" class="btn btn-primary" style="display: none;">Run</button>
+                            <div id="game_info_group" class="btn-group" role="group" aria-label="..." style="display: none;">
+                                <button id="game_info" class="btn btn-default">Info</button>
+                                <button id="game_info_external" class="btn btn-default" title="External link..."><span class="glyphicon glyphicon-link"></span></button>
+                            </div>
+                            <button id="game_delete" class="btn btn-danger" style="display: none;">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <script>
-        var gui = require('nw.gui');
-        var mb = new gui.Menu({type:"menubar"});
-        mb.createMacBuiltin("Insteadman");
-        gui.Window.get().menu = mb;
+        <script>
+            var gui = require('nw.gui');
+            var mb = new gui.Menu({type:"menubar"});
+            mb.createMacBuiltin("Insteadman");
+            gui.Window.get().menu = mb;
 
-        var interpreterFinder = require('./lib/interpreter_finder');
-        var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderMac;
-//        insteadInterpreterFinder.findInterpreter(function(interpreterPath) {
-//            insteadInterpreterFinder.checkInterpreter(interpreterPath, function(version) {
-//                version = version || "not found";
-//                document.getElementById('interpreter_version').innerText = version;
-//            });
-//        });
+            var interpreterFinder = require('./lib/interpreter_finder');
+            var insteadInterpreterFinder = new interpreterFinder.InsteadInterpreterFinderMac;
+        //        insteadInterpreterFinder.findInterpreter(function(interpreterPath) {
+        //            insteadInterpreterFinder.checkInterpreter(interpreterPath, function(version) {
+        //                version = version || "not found";
+        //                document.getElementById('interpreter_version').innerText = version;
+        //            });
+        //        });
 
-        var configurator = new (require('./lib/configurator').ConfiguratorMac);
-//        console.log(configurator.getValue("lang"));
-//        console.log(configurator.getValue("lang1"));
-//        configurator.setValue("lang1", "dd");
-//        console.log(configurator.getAll());
-//        if (configurator.save()) {
-//            console.log("ok");
-//        }
+            var configurator = new (require('./lib/configurator').ConfiguratorMac);
+        //        console.log(configurator.getValue("lang"));
+        //        console.log(configurator.getValue("lang1"));
+        //        configurator.setValue("lang1", "dd");
+        //        console.log(configurator.getAll());
+        //        if (configurator.save()) {
+        //            console.log("ok");
+        //        }
 
-        var statusBar = require('status-bar');
-        var bar = statusBar.create({ total: 0 });
-        //barformatter = new statusBar.Formatter(statusBar);
+            var statusBar = require('status-bar');
+            var bar = statusBar.create({ total: 0 });
+            //barformatter = new statusBar.Formatter(statusBar);
 
-        var manager = new (require('./lib/manager').ManagerMac)(configurator);
+            var manager = new (require('./lib/manager').ManagerMac)(configurator);
 
-//        manager.updateRepositories();
-        var globalGamesList = [];
+        //        manager.updateRepositories();
+            var globalGamesList = [];
 
-        function render() {
-            globalGamesList = manager.getSortedCombinedGameList();
+            function render() {
+                globalGamesList = manager.getSortedCombinedGameList();
 
-            $('#games_list .games_list_item').remove();
+                $('#games_list .games_list_item').remove();
 
-            var gamesHtml = '';
+                var gamesHtml = '';
 
-            globalGamesList.forEach(function (game, id) {
-                var gameTitle = game.title;
-                if (game.installed) {
-                    gameTitle = '<strong>' + gameTitle + '</strong>';
-                }
-                gamesHtml += '<tr class="games_list_item" id="game_list_item-' + id + '" data-id="' + id + '">' +
-                        '<td>' + gameTitle + '</td><td>' + game.version + '</td>' +
-                        '<td>' +
-                            '<span class="game_size">' + bar.format.storage(game.size) + '</span>' +
+                globalGamesList.forEach(function (game, id) {
+                    var gameTitle = game.title;
+                    var rowClass = '';
+                    if (game.installed) {
+                        gameTitle = '<strong>' + gameTitle + '</strong>';
+                        rowClass = 'success';
+                    }
+                    gamesHtml += '<tr class="games_list_item ' + rowClass + '" id="game_list_item-' + id + '" data-id="' + id + '">' +
+                            '<td>' + gameTitle + '</td><td>' + game.version + '</td>' +
+                            '<td>' +
+                                '<span class="game_size">' + bar.format.storage(game.size) + '</span>' +
                                 '<span class="game_progress" style="display: none;"></span>' +
-                        '</td>' +
-                        '</tr>';
-            });
-            $('#games_list').append(gamesHtml);
+                            '</td>' +
+                            '</tr>';
+                });
+                $('#games_list').append(gamesHtml);
 
-            $('.games_list_item').click(function () {
-                var gameId = $(this).data('id');
+                $('.games_list_item').click(function () {
+                    var gameId = $(this).data('id');
+                    var game = globalGamesList[gameId];
+                    $('#game_block').data('game_id', gameId);
+                    $('#game_title').text(game.title);
+
+                    $('.games_list_item').removeClass('info');
+                    $(this).addClass('info');
+
+                    if (game.installed) {
+                        $('#game_install').hide();
+                        $('#game_info_group').show();
+                        $('#game_run').show();
+                        $('#game_delete').show();
+                    } else {
+                        $('#game_install').show();
+                        $('#game_info_group').show();
+                        $('#game_run').hide();
+                        $('#game_delete').hide();
+                    }
+                });
+            }
+
+            $('#game_install').click(function () {
+                var gameId = $(this).parents('#game_block').data('game_id');
                 var game = globalGamesList[gameId];
-                $('#game_block').data('game_id', gameId);
-                $('#game_title').text(game.title);
-
-                if (game.installed) {
-                    $('#game_install').hide();
-                    $('#game_run').show();
-                    $('#game_delete').show();
-                } else {
-                    $('#game_install').show();
-                    $('#game_run').hide();
-                    $('#game_delete').hide();
-                }
-            });
-        }
-
-        $('#game_install').click(function () {
-            var gameId = $(this).parent('#game_block').data('game_id');
-            var game = globalGamesList[gameId];
-            $('#game_list_item-' + gameId + ' .game_size').hide();
-            $('#game_list_item-' + gameId + ' .game_progress').show();
-            manager.installGame(game,
-                    function (game, status) {
-                        console.log([game, status]);
-                        if (!game) {
+                $('#game_list_item-' + gameId + ' .game_size').hide();
+                $('#game_list_item-' + gameId + ' .game_progress').show();
+                manager.installGame(game,
+                        function (game, status) {
+                            console.log([game, status]);
+                            if (!game) {
+                                render();
+                            }
+                            $('#game_list_item-' + gameId + ' .game_progress').text(bar.format.percentage(status.percents));
+                        },
+                        function (game) {
+                            console.log(game);
+                            render();
+                        },
+                        function (game) {
+                            console.log(game);
                             render();
                         }
-                        $('#game_list_item-' + gameId + ' .game_progress').text(bar.format.percentage(status.percents));
-                    },
-                    function (game) {
-                        console.log(game);
-                        render();
-                    },
-                    function (game) {
-                        console.log(game);
-                        render();
-                    }
-            )
-        });
-
-        $('#repository_update').click(function () {
-            manager.updateRepositories(function () {
-
-                    },
-                    function () {
-
-                    },
-                    function () {
-
-                    });
-        });
-
-        $('#game_run').click(function () {
-            var gameId = $(this).parent('#game_block').data('game_id');
-            var game = globalGamesList[gameId];
-            manager.runGame(game);
-        });
-
-        $('#game_delete').click(function () {
-            var gameId = $(this).parent('#game_block').data('game_id');
-            var game = globalGamesList[gameId];
-            manager.deleteGame(game, function() {
-                render();
+                )
             });
-        });
 
-        render();
-    </script>
-  </body>
+            $('#repository_update').click(function () {
+                manager.updateRepositories(function () {
+
+                        },
+                        function () {
+
+                        },
+                        function () {
+
+                        });
+            });
+
+            $('#game_run').click(function () {
+                var gameId = $(this).parents('#game_block').data('game_id');
+                var game = globalGamesList[gameId];
+                manager.runGame(game);
+            });
+
+            $('#game_info_external').click(function () {
+                var gameId = $(this).parents('#game_block').data('game_id');
+                var game = globalGamesList[gameId];
+                gui.Shell.openExternal(game.descurl);
+            });
+
+            $('#game_info').click(function () {
+                var gameId = $(this).parents('#game_block').data('game_id');
+                var game = globalGamesList[gameId];
+                var infoWindow = gui.Window.open(game.descurl, {toolbar: false});
+            });
+
+            $('#game_delete').click(function () {
+                var gameId = $(this).parents('#game_block').data('game_id');
+                var game = globalGamesList[gameId];
+                manager.deleteGame(game, function() {
+                    render();
+                });
+            });
+
+            render();
+        </script>
+    </body>
 </html>
