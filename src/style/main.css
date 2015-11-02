@@ -1,3 +1,7 @@
 #games_list tr {
     cursor: pointer;
 }
+
+#games_list .game_progress {
+    margin-bottom: 0;
+}
