@@ -29,6 +29,13 @@
                             <th>Size</th>
                         </tr>
                     </table>
+                    <div id="manager_loader">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                Please wait...
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-xs-4">
                     <div id="game_block" class="affix affix-top" data-game_id="">
@@ -37,7 +44,7 @@
                             <p><img id="game_logo" src="./resources/images/logo.png" alt="InsteadMan" data-default-src="./resources/images/logo.png"></p>
                         </div>
                         <div id="game_buttons">
-                            <button id="game_install" class="btn btn-primary" style="display: none;">Install</button>
+                            <button id="game_install" class="btn btn-primary" data-loading-text="Installing..." style="display: none;">Install</button>
                             <button id="game_run" class="btn btn-primary" style="display: none;">Run</button>
                             <div id="game_info_group" class="btn-group" role="group" aria-label="..." style="display: none;">
                                 <button id="game_info" class="btn btn-default">Info</button>
@@ -127,6 +134,14 @@
                 $('#error_dialog').modal('show');
             }
 
+            function updateRepositories(button) {
+                var $btn = $(button).button('loading')
+                manager.updateRepositories(null, function () {
+                    $btn.button('reset');
+                    render();
+                });
+            }
+
             function render() {
                 globalGamesList = manager.getSortedCombinedGameList();
                 console.log(globalGamesList);
@@ -146,8 +161,8 @@
                             '<td>' + gameTitle + '</td><td>' + game.version + '</td>' +
                             '<td>' +
                                 '<span class="game_size">' + bar.format.storage(game.size) + '</span>' +
-                                '<div class="game_progress progress progress-striped" style="display: none;">' +
-                                    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">' +
+                                '<div class="game_progress progress" style="display: none;">' +
+                                    '<div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">' +
                                         '<span class="sr-only">0%</span>' +
                                     '</div>' +
                                 '</div>' +
@@ -164,6 +179,8 @@
                     var gameId = $(this).data('id');
                     selectGame(gameId, this);
                 });
+
+                $("#manager_loader").hide();
             }
 
             $('#game_install').click(function () {
@@ -171,6 +188,9 @@
                 var game = globalGamesList[gameId];
                 $('#game_list_item-' + gameId + ' .game_size').hide();
                 $('#game_list_item-' + gameId + ' .game_progress').show();
+
+                var $btn = $(this).button('loading');
+
                 manager.installGame(game,
                         function (game, status) {
                             console.log([game, status]);
@@ -204,6 +224,7 @@
                             gameProgress.find('.sr-only').text(bar.format.percentage(status.percents));
 
                             setTimeout(function () {
+                                $btn.button('reset');
                                 render();
                                 selectGame(gameId, $('#game_list_item-' + gameId));
                             }, 200);
@@ -212,11 +233,7 @@
             });
 
             $('#repository_update').click(function () {
-                var $btn = $(this).button('loading')
-                manager.updateRepositories(null, function () {
-                    $btn.button('reset');
-                    render();
-                });
+                updateRepositories(this);
             });
 
             $('#game_run').click(function () {
@@ -252,7 +269,13 @@
                 });
             });
 
-            render();
+            // Update repository files or just render list
+            var repositoryFiles = manager.getRepositoryFiles();
+            if (repositoryFiles.length < 1) {
+                updateRepositories($('#repository_update'));
+            } else {
+                render();
+            }
         </script>
     </body>
 </html>
