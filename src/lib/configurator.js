@@ -1,10 +1,11 @@
 "use strict";
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var expandHomeDir = require('expand-home-dir');
 
 class Configurator {
     constructor() {
+        this.interpreterGamePath = "~/.instead/games/";
         this.configPath = "~/.instead/manager/";
         this.configFilename = "instead-manager-settings.json";
         this.configData = {};
@@ -13,13 +14,17 @@ class Configurator {
         this.repositoriesPath = null;
         this.tempGamePath = null;
         this.updateBasePaths();
+
+        this.checkAndCreateDirectoriesAndFiles();
     }
 
     updateBasePaths() {
-        var expandedConfigPath = expandHomeDir(this.configPath);
-        this.configFilePath = expandedConfigPath + this.configFilename;
-        this.repositoriesPath = expandedConfigPath + "repositories/";
-        this.tempGamePath = expandedConfigPath + "games/";
+        this.interpreterGamePath = expandHomeDir(this.interpreterGamePath);
+        this.configPath = expandHomeDir(this.configPath);
+        this.configFilePath = this.configPath + this.configFilename;
+        this.repositoriesPath = this.configPath + "repositories/";
+        this.tempGamePath = this.configPath + "games/";
+        this.skeletonPath = './resources/skeleton/';
     }
 
     getRepositoriesPath() {
@@ -30,14 +35,18 @@ class Configurator {
         return this.tempGamePath;
     }
 
-    checkAndCreateConfigFile() {
+    checkAndCreateDirectoriesAndFiles() {
+        this.checkAndCreateDirectory(this.configPath);
+        this.checkAndCreateDirectory(this.repositoriesPath);
+        this.checkAndCreateDirectory(this.tempGamePath);
+        this.checkAndCreateDirectory(this.interpreterGamePath);
+        
         // TODO: create recursive dir, copy skeleton config, write default settings
-        //try {
-        //    return fs.statSync(this.configFilePath).isFile();
-        //} catch (err) {
-        //    this.checkAndCreateDirectory();
-        //    fs.
-        //}
+        try {
+            fs.statSync(this.configFilePath).isFile()
+        } catch (err) {
+            fs.copySync(this.skeletonPath + this.configFilename, this.configFilePath);
+        }
     }
 
     read() {
@@ -97,8 +106,14 @@ class Configurator {
     }
 
     checkAndCreateDirectory(path) {
-        var stat = fs.statSync(path);
-        if (!stat.isDirectory()) {
+        var isDirectoryExists = false;
+        try {
+            var stat = fs.statSync(path);
+            isDirectoryExists = stat.isDirectory();
+        } catch (err) {
+        }
+
+        if (!isDirectoryExists) {
             fs.mkdirSync(path);
         }
     }

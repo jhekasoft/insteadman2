@@ -1,3 +1,7 @@
+#game_title {
+    text-align: center;
+}
+
 #games_list tr {
     cursor: pointer;
 }

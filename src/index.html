@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Insteadman</title>
+        <meta charset="utf-8">
+        <title>InsteadMan</title>
         <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="./style/main.css">
         <script>
@@ -13,9 +14,14 @@
     </head>
     <body>
         <div class="container">
-            <button id="repository_update" class="btn btn-default">Update repositories</button>
             <div class="row">
                 <div class="col-xs-8">
+                    <p></p>
+                    <p>
+                        <button id="repository_update" class="btn btn-default" data-loading-text="Updating..."><span class="glyphicon glyphicon-refresh"></span>&nbsp;Update</button>
+                        <button id="settings" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span>&nbsp;Settings</button>
+                        <button id="filter" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>&nbsp;Filter</button>
+                    </p>
                     <table id="games_list" class="table table-condensed table-hover">
                         <tr>
                             <th>Title</th>
@@ -25,12 +31,12 @@
                     </table>
                 </div>
                 <div class="col-xs-4">
-                    <div id="game_block" class="affix" data-game_id="">
-                        <h2 id="game_title">Insteadman</h2>
+                    <div id="game_block" class="affix affix-top" data-game_id="">
+                        <h4 id="game_title" data-default-text="InsteadMan">InsteadMan</h4>
                         <div>
-                            <p><img id="game_logo" src="./resources/images/logo.png" alt="Insteadman"></p>
+                            <p><img id="game_logo" src="./resources/images/logo.png" alt="InsteadMan" data-default-src="./resources/images/logo.png"></p>
                         </div>
-                        <div>
+                        <div id="game_buttons">
                             <button id="game_install" class="btn btn-primary" style="display: none;">Install</button>
                             <button id="game_run" class="btn btn-primary" style="display: none;">Run</button>
                             <div id="game_info_group" class="btn-group" role="group" aria-label="..." style="display: none;">
@@ -38,6 +44,19 @@
                                 <button id="game_info_external" class="btn btn-default" title="External link..."><span class="glyphicon glyphicon-link"></span></button>
                             </div>
                             <button id="game_delete" class="btn btn-danger" style="display: none;">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="error_dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header text-danger">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="error_dialog_title"></h4>
+                        </div>
+                        <div class="modal-body" id="error_dialog_message">
                         </div>
                     </div>
                 </div>
@@ -87,19 +106,30 @@
 
                 if (game.installed) {
                     $('#game_install').hide();
-                    $('#game_info_group').show();
                     $('#game_run').show();
                     $('#game_delete').show();
                 } else {
                     $('#game_install').show();
-                    $('#game_info_group').show();
                     $('#game_run').hide();
                     $('#game_delete').hide();
                 }
+
+                if (game.descurl) {
+                    $('#game_info_group').show();
+                } else {
+                    $('#game_info_group').hide();
+                }
+            }
+
+            function showError(title, message) {
+                $("#error_dialog_title").text(title);
+                $("#error_dialog_message").text(message);
+                $('#error_dialog').modal('show');
             }
 
             function render() {
                 globalGamesList = manager.getSortedCombinedGameList();
+                console.log(globalGamesList);
 
                 $('#games_list .games_list_item').remove();
 
@@ -125,6 +155,10 @@
                             '</tr>';
                 });
                 $('#games_list').append(gamesHtml);
+
+                $("#game_title").text($("#game_title").data("default-text"));
+                $("#game_logo").attr("src", ($("#game_logo").data("default-src")));
+                $('#game_buttons').children().hide();
 
                 $('.games_list_item').click(function () {
                     var gameId = $(this).data('id');
@@ -158,6 +192,11 @@
                         function (game) {
                             console.log(game);
 
+                            if (!game) {
+                                render();
+                                return showError("Installation error", "Installation has failed. Please check INSTEAD command in settings.");
+                            }
+
                             var percents = 100;
                             var gameProgress = $('#game_list_item-' + gameId + ' .game_progress');
                             gameProgress.find('.progress-bar').attr('aria-valuenow', percents);
@@ -173,21 +212,23 @@
             });
 
             $('#repository_update').click(function () {
-                manager.updateRepositories(function () {
-
-                        },
-                        function () {
-
-                        },
-                        function () {
-
-                        });
+                var $btn = $(this).button('loading')
+                manager.updateRepositories(null, function () {
+                    $btn.button('reset');
+                    render();
+                });
             });
 
             $('#game_run').click(function () {
                 var gameId = $(this).parents('#game_block').data('game_id');
                 var game = globalGamesList[gameId];
-                manager.runGame(game);
+                manager.runGame(game, function (gameName) {
+                    if (gameName) {
+                        return console.log("Running " + gameName + ".");
+                    }
+
+                    showError("Running error", "Running has failed. Please check INSTEAD command in settings.");
+                });
             });
 
             $('#game_info_external').click(function () {

@@ -33,6 +33,8 @@ class Manager {
         var data = fs.readFileSync(filePath);
         var parser = new xml2js.Parser();
         parser.parseString(data, function (err, result) {
+            if (err || !result) return;
+
             result.game_list.game.forEach(function (xmlGame) {
                 var game = new gameClass();
                 game.hydrateFromXml(xmlGame, path.basename(filePath));
@@ -123,9 +125,10 @@ class Manager {
     }
 
 
-    updateRepositories(downloadStatusCallback, beginRepositoryDownloadingCallback, endDownloadingCallback) {
+    updateRepositories(downloadStatusCallback, endDownloadingCallback) {
         var repositories = this.configurator.getRepositories();
         var repositoriesPath = this.configurator.getRepositoriesPath();
+        var downloadedRepositoriesCount = 0;
         console.log([repositories, repositoriesPath]);
 
         repositories.forEach(function(repository) {
@@ -133,41 +136,42 @@ class Manager {
             var filename = repository.name + ".xml";
             var bar;
             var file = fs.createWriteStream(repositoriesPath + filename);
+
             console.log(url);
             http.get(url, function (res) {
                 var total = res.headers['content-length'] || 0;
                 bar = statusBar.create({total: total})
                     .on('render', function (stats) {
-                        process.stdout.write(
-                            filename + ' ' +
-                            this.format.storage(stats.currentSize) + ' ' +
-                            this.format.speed(stats.speed) + ' ' +
-                            this.format.time(stats.elapsedTime) + ' ' +
-                            this.format.time(stats.remainingTime) + ' [' +
-                            this.format.progressBar(stats.percentage) + '] ' +
-                            this.format.percentage(stats.percentage));
-                        process.stdout.cursorTo(0);
+                        if (downloadStatusCallback) {
+                            downloadStatusCallback(repository, {
+                                percents: stats.percentage,
+                                totalSize: stats.totalSize,
+                                currentSize: stats.currentSize,
+                                speed: stats.speed
+                            });
+                        }
                     });
 
-                res.pipe(bar);
                 res.pipe(file);
+                res.pipe(bar);
 
                 file.on('finish', function () {
-                    file.close(function() {
-                        console.log("download completed");
-                    });
-                });
-                file.on('error', function (err) {
-                    fs.unlink(dest),
-                        function() {
-                            console.log("error");
+                    file.close(function () {
+                        downloadedRepositoriesCount++;
+                        if (downloadedRepositoriesCount >= repositories.length) {
+                            if (endDownloadingCallback) endDownloadingCallback(true);
                         }
+                    });
                 });
             }).on('error', function (err) {
                 if (bar) bar.cancel();
+                fs.unlink(repositoriesPath + filename);
+                downloadedRepositoriesCount++;
                 console.error(err);
             });
         });
+
+        console.log("End update");
     }
 
     executeInstallGameCommand(gameFilepath, callback) {
@@ -178,7 +182,7 @@ class Manager {
             if (error) {
                 if (callback) callback(false);
             } else {
-                if (callback) callback(stdout.trim());
+                if (callback) callback(true);
             }
         });
     }
@@ -209,17 +213,17 @@ class Manager {
                     });
                 });
 
-            res.pipe(bar);
             res.pipe(file);
+            res.pipe(bar);
 
             file.on('finish', function () {
                 file.close(function() {
                     fs.move(tempPartGameFilepath, tempGameFilepath, {clobber: true}, function (err) {
                         if (err) return endInstallationCallback(false, err);
                         beginInstallationCallback(game);
-                        here.executeInstallGameCommand(tempGameFilepath, function () {
+                        here.executeInstallGameCommand(tempGameFilepath, function (result) {
                             fs.unlink(tempGameFilepath);
-                            endInstallationCallback(game);
+                            if (result) endInstallationCallback(game); else endInstallationCallback(false);
                         });
                     })
                 });
@@ -230,8 +234,6 @@ class Manager {
             if (bar) bar.cancel();
             console.error(err);
         });
-
-        // this.executeInstallGameCommand();
     }
 
     executeRunGameCommand(gameName, callback) {
@@ -242,16 +244,16 @@ class Manager {
             if (error) {
                 if (callback) callback(false);
             } else {
-                if (callback) callback(stdout.trim());
+                if (callback) callback(gameName);
             }
         });
     }
 
-    runGame(game) {
+    runGame(game, callback) {
         var runningGameName = game.name;
         // TODO: idf check and change runningGameName
 
-        this.executeRunGameCommand(runningGameName);
+        this.executeRunGameCommand(runningGameName, callback);
     }
 
     deleteFolder(dir) {
