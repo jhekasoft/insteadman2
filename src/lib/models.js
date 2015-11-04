@@ -13,6 +13,7 @@ class Game {
         this.repositoryFilename = null;
         this.installed = false;
         this.onlyLocal = false;
+        this.image = null;
     }
 
     // TODO: move to other place
@@ -26,6 +27,9 @@ class Game {
         this.size = xmlGame.size[0];
         this.descurl = xmlGame.descurl[0];
         this.repositoryFilename = repositoryFilename;
+        if (xmlGame.image && !/\/$/.test(xmlGame.image[0])) {
+            this.image = xmlGame.image[0];
+        }
     }
 }
 
