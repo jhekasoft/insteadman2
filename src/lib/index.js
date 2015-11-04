@@ -1,4 +1,5 @@
 var os = require('os');
+var path = require('path');
 var gui = require('nw.gui');
 var statusBar = require('status-bar');
 var interpreterFinderLib = require('./lib/interpreter_finder');
@@ -45,6 +46,10 @@ var globalGamesList = [];
 var ManGui = {
     selectGame: function(gameId, item) {
         var game = globalGamesList[gameId];
+
+        $('.games_list_item').removeClass('info');
+        $(item).addClass('info');
+
         $('#game_block').data('game_id', gameId);
         $('#game_title').text(game.title);
         if (game.image) {
@@ -53,8 +58,29 @@ var ManGui = {
             $("#game_logo").attr("src", ($("#game_logo").data("default-src")));
         }
 
-        $('.games_list_item').removeClass('info');
-        $(item).addClass('info');
+        if (game.repositoryFilename) {
+            $("#game_repository").text(path.basename(game.repositoryFilename));
+            $("#game_repository").show();
+        } else {
+            $("#game_repository").hide();
+        }
+
+        if (game.langs && game.langs.length) {
+            $("#game_languages").html('');
+            game.langs.forEach(function (lang) {
+                $("#game_languages").append('<span class="label label-primary"">' + lang + '</span>');
+            });
+            $("#game_languages").show();
+        } else {
+            $("#game_languages").hide();
+        }
+
+        if (game.version) {
+            $("#game_version").text(game.version);
+            $("#game_version").show();
+        } else {
+            $("#game_version").hide();
+        }
 
         if (game.installed) {
             $('#game_install').hide();
@@ -118,6 +144,9 @@ var ManGui = {
 
         $("#game_title").text($("#game_title").data("default-text"));
         $("#game_logo").attr("src", ($("#game_logo").data("default-src")));
+        $("#game_repository").hide();
+        $("#game_languages").hide();
+        $("#game_version").hide();
         $('#game_buttons').children().hide();
 
         $('.games_list_item').click(function () {
