@@ -22,41 +22,65 @@
                         <button id="settings" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span>&nbsp;Settings</button>
                         <button id="filter" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>&nbsp;Filter</button>
                     </p>
-                    <table id="games_list" class="table table-condensed table-hover">
-                        <tr>
-                            <th>Title</th>
-                            <th>Version</th>
-                            <th>Size</th>
-                        </tr>
-                    </table>
-                    <div id="manager_loader">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                Please wait...
+                    <div id="games_list_container">
+                        <table id="games_list" class="table table-condensed table-hover">
+                            <tr>
+                                <th>Title</th>
+                                <th>Version</th>
+                                <th>Size</th>
+                            </tr>
+                        </table>
+                        <div id="manager_loader">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    Please wait...
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-xs-4">
-                    <div id="game_block" class="affix affix-top" data-game_id="">
+                    <div id="game_block" data-game_id="">
                         <h4 id="game_title" data-default-text="InsteadMan">InsteadMan</h4>
-                        <div>
-                            <p><img id="game_logo" src="./resources/images/logo.png" alt="InsteadMan" data-default-src="./resources/images/logo.png"></p>
+                        <p>
+                            <span class="thumbnail"><img id="game_logo" src="./resources/images/logo.png" alt="InsteadMan" data-default-src="./resources/images/logo.png"></span>
+                        </p>
+                        <div id="game_buttons">
+                            <p>
+                                <button id="game_install" class="btn btn-primary btn-lg" data-loading-text="Installing..." style="display: none;">Install</button>
+                                <button id="game_run" class="btn btn-primary btn-lg" style="display: none;">Run</button>
+                            </p>
+                            <p>
+                                <span id="game_info_group" class="btn-group" role="group" aria-label="..." style="display: none;">
+                                    <button id="game_info" class="btn btn-default">Info</button>
+                                    <button id="game_info_external" class="btn btn-default" title="External link..."><span class="glyphicon glyphicon-link"></span></button>
+                                </span>
+                                <button id="game_delete" class="btn btn-danger" style="display: none;">Remove</button>
+                            </p>
                         </div>
                         <p>
                             <span id="game_repository" class="label label-default" style="display: none;"></span>
                             <span id="game_languages" style="display: none;"></span>
                             <span id="game_version" class="label label-info" style="display: none;"></span>
                         </p>
-                        <div id="game_buttons">
-                            <button id="game_install" class="btn btn-primary" data-loading-text="Installing..." style="display: none;">Install</button>
-                            <button id="game_run" class="btn btn-primary" style="display: none;">Run</button>
-                            <div id="game_info_group" class="btn-group" role="group" aria-label="..." style="display: none;">
-                                <button id="game_info" class="btn btn-default">Info</button>
-                                <button id="game_info_external" class="btn btn-default" title="External link..."><span class="glyphicon glyphicon-link"></span></button>
-                            </div>
-                            <button id="game_delete" class="btn btn-danger" style="display: none;">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="game_delete_confirm_dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header text-danger">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Remove confirmation</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you really want to remove <strong id="game_delete_confirmation_title"></strong> game?</p>
+                            <p>
+                                <button id="game_confirm_cancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button id="game_confirm_delete" class="btn btn-danger" data-game_id="" data-loading-text="Removing...">Remove</button>
+                            </p>
                         </div>
                     </div>
                 </div>

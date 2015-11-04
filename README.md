@@ -1,4 +1,4 @@
-insteadman
+InsteadMan
 ===========
 
 Manager for INSTEAD interpreter. Version 2.0. There is only demo.

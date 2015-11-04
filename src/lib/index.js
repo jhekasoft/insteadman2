@@ -52,10 +52,10 @@ var ManGui = {
 
         $('#game_block').data('game_id', gameId);
         $('#game_title').text(game.title);
+
+        $("#game_logo").attr("src", ($("#game_logo").data("default-src")));
         if (game.image) {
             $('#game_logo').attr('src', game.image);
-        } else {
-            $("#game_logo").attr("src", ($("#game_logo").data("default-src")));
         }
 
         if (game.repositoryFilename) {
@@ -113,6 +113,22 @@ var ManGui = {
         });
     },
 
+    confirmDeletion: function(gameId) {
+        var game = globalGamesList[gameId];
+        $('#game_delete_confirmation_title').text(game.title);
+        $('#game_confirm_delete').data('game_id', gameId);
+        $('#game_delete_confirm_dialog').modal('show');
+    },
+
+    deleteGame: function(gameId, callback) {
+        var game = globalGamesList[gameId];
+        manager.deleteGame(game, function() {
+            if (callback) callback();
+            ManGui.render();
+            ManGui.selectGame(gameId, $('#game_list_item-' + gameId));
+        });
+    },
+
     render: function() {
         globalGamesList = manager.getSortedCombinedGameList();
         console.log(globalGamesList);
@@ -147,7 +163,11 @@ var ManGui = {
         $("#game_repository").hide();
         $("#game_languages").hide();
         $("#game_version").hide();
-        $('#game_buttons').children().hide();
+
+        $('#game_install').hide();
+        $('#game_run').hide();
+        $('#game_info_group').hide();
+        $('#game_delete').hide();
 
         $('.games_list_item').click(function () {
             var gameId = $(this).data('id');
@@ -155,6 +175,10 @@ var ManGui = {
         });
 
         $("#manager_loader").hide();
+    },
+
+    redrawGui: function() {
+        $('#games_list_container').css('height', $(window).innerHeight() - 60);
     }
 };
 
@@ -246,10 +270,16 @@ $('#game_info').click(function () {
 
 $('#game_delete').click(function () {
     var gameId = $(this).parents('#game_block').data('game_id');
-    var game = globalGamesList[gameId];
-    manager.deleteGame(game, function() {
-        ManGui.render();
-        ManGui.selectGame(gameId, $('#game_list_item-' + gameId));
+    ManGui.confirmDeletion(gameId);
+});
+
+$('#game_confirm_delete').click(function () {
+    var gameId = $(this).data('game_id');
+
+    var $btn = $(this).button('loading');
+    ManGui.deleteGame(gameId, function () {
+        $btn.button('reset');
+        $('#game_delete_confirm_dialog').modal('hide');
     });
 });
 
@@ -260,3 +290,11 @@ if (repositoryFiles.length < 1) {
 } else {
     ManGui.render();
 }
+
+$(window).load(function () {
+    ManGui.redrawGui();
+});
+
+$(window).resize(function () {
+    ManGui.redrawGui();
+});
