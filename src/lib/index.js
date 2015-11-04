@@ -1,5 +1,4 @@
 var os = require('os');
-var path = require('path');
 var gui = require('nw.gui');
 var statusBar = require('status-bar');
 var interpreterFinderLib = require('./lib/interpreter_finder');
@@ -59,7 +58,7 @@ var ManGui = {
         }
 
         if (game.repositoryFilename) {
-            $("#game_repository").text(path.basename(game.repositoryFilename));
+            $("#game_repository").text(game.repositoryFilename);
             $("#game_repository").show();
         } else {
             $("#game_repository").hide();
@@ -129,9 +128,28 @@ var ManGui = {
         });
     },
 
+    fillFilterRepositories: function() {
+        var repositories = manager.getRepositoryFiles(true);
+        var $filterRepositories = $('#filter_repository');
+        $filterRepositories.html('');
+        $filterRepositories.append($('<option>', {value: '', text: $filterRepositories.data('label')}));
+        repositories.forEach(function (repository) {
+            $filterRepositories.append($('<option>', {value: repository, text: repository}));
+        });
+    },
+
+    fillFilterLanguages: function() {
+        var languages = manager.getGamelistLangs(globalGamesList);
+        var $filterLanguages = $('#filter_language');
+        $filterLanguages.html('');
+        $filterLanguages.append($('<option>', {value: '', text: $filterLanguages.data('label')}));
+        languages.forEach(function (language) {
+            $filterLanguages.append($('<option>', {value: language, text: language}));
+        });
+    },
+
     render: function() {
         globalGamesList = manager.getSortedCombinedGameList();
-        console.log(globalGamesList);
 
         $('#games_list .games_list_item').remove();
 
@@ -174,6 +192,9 @@ var ManGui = {
             ManGui.selectGame(gameId, this);
         });
 
+        ManGui.fillFilterRepositories();
+        ManGui.fillFilterLanguages();
+
         $("#manager_loader").hide();
     },
 
@@ -192,7 +213,6 @@ $('#game_install').click(function () {
 
     manager.installGame(game,
         function (game, status) {
-            console.log([game, status]);
 
             var percents = Math.round(status.percents * 100);
             var gameProgress = $('#game_list_item-' + gameId + ' .game_progress');

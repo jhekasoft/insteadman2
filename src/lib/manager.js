@@ -18,17 +18,40 @@ class Manager {
         this.configurator = configurator;
     }
 
-    getRepositoryFiles() {
-        return glob.sync(this.configurator.getRepositoriesPath() + "*.xml");
+    getRepositoryFiles(onlyFilenames) {
+        onlyFilenames = onlyFilenames || false;
+        var fullPaths = glob.sync(this.configurator.getRepositoriesPath() + "*.xml");
+
+        if (!onlyFilenames) {
+            return fullPaths;
+        }
+
+        var fileNames = [];
+        fullPaths.forEach(function (filePath) {
+            fileNames.push(path.basename(filePath));
+        });
+
+        return fileNames;
     }
 
-    xmlGameParseLanguages(game) {
+    getGamelistLangs(gameList) {
+        gameList = gameList || this.getSortedCombinedGameList();
 
+        var languages = [];
+        gameList.forEach(function (game) {
+            if (game.langs && game.langs.length) {
+                game.langs.forEach(function (lang) {
+                    if (languages.indexOf(lang) > -1) {
+                        return;
+                    }
+                    languages.push(lang);
+                });
+            }
+        });
+        return languages;
     }
 
     getGamesFromFile(filePath) {
-        // TODO: this.xmlGameParseLanguages();
-
         var games = [];
         var data = fs.readFileSync(filePath);
         var parser = new xml2js.Parser();
@@ -119,11 +142,6 @@ class Manager {
     getGamelistRepositories(gameList) {
 
     }
-
-    getGamelistLangs(gameList) {
-
-    }
-
 
     updateRepositories(downloadStatusCallback, endDownloadingCallback) {
         var repositories = this.configurator.getRepositories();

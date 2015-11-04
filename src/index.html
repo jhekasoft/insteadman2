@@ -22,6 +22,29 @@
                         <button id="settings" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span>&nbsp;Settings</button>
                         <button id="filter" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>&nbsp;Filter</button>
                     </p>
+                    <form class="form-inline">
+                        <div class="form-group form-group-sm">
+                            <label class="sr-only" for="filter_keyword">Search</label>
+                            <input type="email" class="form-control" id="filter_keyword" placeholder="Search">
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label class="sr-only" for="filter_repository">Repo</label>
+                            <select class="form-control" id="filter_repository" data-label="Repo">
+                                <option>Repo</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label class="sr-only" for="filter_language">Lang</label>
+                            <select class="form-control" id="filter_language" data-label="Lang">
+                                <option>Lang</option>
+                            </select>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Only installed
+                            </label>
+                        </div>
+                    </form>
                     <div id="games_list_container">
                         <table id="games_list" class="table table-condensed table-hover">
                             <tr>
