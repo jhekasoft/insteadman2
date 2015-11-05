@@ -129,6 +129,8 @@ var ManGui = {
     },
 
     fillFilterRepositories: function() {
+        var selectedRepository = $('#filter_repository').val();
+
         var repositories = manager.getRepositoryFiles(true);
         var $filterRepositories = $('#filter_repository');
         $filterRepositories.html('');
@@ -136,9 +138,15 @@ var ManGui = {
         repositories.forEach(function (repository) {
             $filterRepositories.append($('<option>', {value: repository, text: repository}));
         });
+
+        if (selectedRepository) {
+            $('#filter_repository').val(selectedRepository);
+        }
     },
 
     fillFilterLanguages: function() {
+        var selectedLanguage = $('#filter_language').val();
+
         var languages = manager.getGamelistLangs(globalGamesList);
         var $filterLanguages = $('#filter_language');
         $filterLanguages.html('');
@@ -146,6 +154,10 @@ var ManGui = {
         languages.forEach(function (language) {
             $filterLanguages.append($('<option>', {value: language, text: language}));
         });
+
+        if (selectedLanguage) {
+            $('#filter_language').val(selectedLanguage);
+        }
     },
 
     render: function() {
@@ -175,6 +187,11 @@ var ManGui = {
                     '</tr>';
         });
         $('#games_list').append(gamesHtml);
+
+        // Add version to default game title
+        var defaultGameTitle = $("#game_title").data("default-text");
+        defaultGameTitle = defaultGameTitle.replace('{version}', manager.version);
+        $("#game_title").data("default-text", defaultGameTitle);
 
         $("#game_title").text($("#game_title").data("default-text"));
         $("#game_logo").attr("src", ($("#game_logo").data("default-src")));
@@ -213,7 +230,7 @@ var ManGui = {
     },
 
     redrawGui: function() {
-        $('#games_list_container').css('height', $(window).innerHeight() - 60);
+        $('#games_list_container').css('height', $(window).innerHeight() - $('#header_container').outerHeight() - 26);
     }
 };
 
@@ -278,6 +295,14 @@ $('#settings').click(function () {
     location.reload()
 });
 
+$('#filter').click(function () {
+    if ('false' == $(this).attr('aria-pressed')) {
+        $('#filter_container').show();
+    } else {
+        $('#filter_container').hide();
+    }
+});
+
 $('#game_run').click(function () {
     var gameId = $(this).parents('#game_block').data('game_id');
     var game = globalGamesList[gameId];
@@ -317,6 +342,10 @@ $('#game_confirm_delete').click(function () {
     });
 });
 
+$('#filter_keyword').change(function () {
+    ManGui.filterGames();
+});
+
 $('#filter_keyword').keyup(function () {
     ManGui.filterGames();
 });
@@ -330,6 +359,14 @@ $('#filter_language').change(function () {
 });
 
 $('#filter_only_installed').change(function () {
+    ManGui.filterGames();
+});
+
+$('#filter_reset').click(function () {
+    $('#filter_keyword').val('');
+    $('#filter_repository').val('');
+    $('#filter_language').val('');
+    $('#filter_only_installed').prop('checked', false);
     ManGui.filterGames();
 });
 

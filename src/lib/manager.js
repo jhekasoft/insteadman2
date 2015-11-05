@@ -12,6 +12,7 @@ var gameClass = require('./models').Game;
 
 class Manager {
     constructor(configurator) {
+        this.version = '2.0.1beta';
         if (!(configurator instanceof configuratorClass)) {
             throw "Wrong Configurator instance.";
         }

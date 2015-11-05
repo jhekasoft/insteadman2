@@ -15,36 +15,40 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-xs-8">
-                    <p></p>
-                    <p>
-                        <button id="repository_update" class="btn btn-default" data-loading-text="Updating..."><span class="glyphicon glyphicon-refresh"></span>&nbsp;Update</button>
-                        <button id="settings" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span>&nbsp;Settings</button>
-                        <button id="filter" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>&nbsp;Filter</button>
-                    </p>
-                    <form class="form-inline">
-                        <div class="form-group form-group-sm">
-                            <label class="sr-only" for="filter_keyword">Search</label>
-                            <input type="email" class="form-control" id="filter_keyword" placeholder="Search">
-                        </div>
-                        <div class="form-group form-group-sm">
-                            <label class="sr-only" for="filter_repository">Repo</label>
-                            <select class="form-control" id="filter_repository" data-label="Repo">
-                                <option>Repo</option>
-                            </select>
-                        </div>
-                        <div class="form-group form-group-sm">
-                            <label class="sr-only" for="filter_language">Lang</label>
-                            <select class="form-control" id="filter_language" data-label="Lang">
-                                <option>Lang</option>
-                            </select>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input id="filter_only_installed" value="1" type="checkbox"> Only installed
-                            </label>
-                        </div>
-                    </form>
+                <div class="col-sm-8 col-xs-12">
+                    <div id="header_container">
+                        <p></p>
+                        <p>
+                            <button id="repository_update" class="btn btn-default" data-loading-text="Updating..."><span class="glyphicon glyphicon-refresh"></span>&nbsp;Update</button>
+                            <button id="settings" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span>&nbsp;Settings</button>
+                            <button id="filter" class="btn btn-default active" data-toggle="button" aria-pressed="true" autocomplete="off"><span class="glyphicon glyphicon-search"></span>&nbsp;Filter</button>
+                            <button id="info" class="btn btn-default active" data-toggle="button" aria-pressed="true" autocomplete="off"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;Info</button>
+                        </p>
+                        <form id="filter_container" class="form-inline" onsubmit="return false;">
+                            <div class="form-group">
+                                <input type="email" class="form-control" id="filter_keyword" placeholder="Search">
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" id="filter_repository" data-label="Repo">
+                                    <option value="">Repo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" id="filter_language" data-label="Lang">
+                                    <option value="">Lang</option>
+                                </select>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input id="filter_only_installed" value="1" type="checkbox"> Installed
+                                </label>
+                            </div>
+                            <div class="form-group form-group-right">
+                                <button id="filter_reset" class="btn btn-link" title="Reset filter"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </form>
+                        <p></p>
+                    </div>
                     <div id="games_list_container">
                         <table id="games_list" class="table table-condensed table-hover">
                             <tr>
@@ -63,9 +67,9 @@
                     </div>
                 </div>
 
-                <div class="col-xs-4">
+                <div class="col-sm-4">
                     <div id="game_block" data-game_id="">
-                        <h4 id="game_title" data-default-text="InsteadMan">InsteadMan</h4>
+                        <h4 id="game_title" data-default-text="InsteadMan {version}">InsteadMan</h4>
                         <p>
                             <span class="thumbnail"><img id="game_logo" src="./resources/images/logo.png" alt="InsteadMan" data-default-src="./resources/images/logo.png"></span>
                         </p>

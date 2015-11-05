@@ -13,7 +13,9 @@
   "window": {
     "icon": "resources/images/logo.png",
     "toolbar": true,
-    "width": 760,
+    "min_width": 770,
+    "width": 770,
+    "min_height": 400,
     "height": 460,
     "resizable": true
   },

@@ -1,10 +1,18 @@
+body, .btn-default {
+    background-color: #f9f9f9;
+}
+
+#games_list {
+    background-color: #fff;
+}
+
 #game_title {
     text-align: center;
 }
 
 #game_logo {
     width: 220px;
-    max-height: 340px;
+    max-height: 240px;
 }
 
 #games_list_container {
@@ -18,4 +26,20 @@
 
 #games_list .game_progress {
     margin-bottom: 0;
+}
+
+#filter_keyword {
+    width: 100px;
+}
+
+#filter_repository {
+    width: 140px;
+}
+
+#filter_language {
+    width: 70px;
+}
+
+.form-group-right {
+    float: right;
 }
