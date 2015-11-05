@@ -67,7 +67,7 @@ var ManGui = {
         if (game.langs && game.langs.length) {
             $("#game_languages").html('');
             game.langs.forEach(function (lang) {
-                $("#game_languages").append('<span class="label label-primary"">' + lang + '</span>');
+                $("#game_languages").append('<span class="label label-primary"">' + lang + '</span> ');
             });
             $("#game_languages").show();
         } else {
