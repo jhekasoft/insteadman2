@@ -111,7 +111,6 @@ class Manager {
     getCombinedGameList() {
         var gameList = this.getGameList();
         var localGameList = this.getLocalGameList();
-        //var onlyLocalGameName = [];
 
         localGameList.forEach(function (localGame) {
             localGame.onlyLocal = true;
@@ -135,13 +134,25 @@ class Manager {
         return gameList;
     }
 
+    // TODO: private/prublic
     getSortedCombinedGameList() {
-        return this.getCombinedGameList().sort(this.sortingCompareGameByTitle);
+        var gameList = this.getCombinedGameList();
+        gameList.sort(this.sortingCompareGameByTitle);
+        gameList = this.identifyGameList(gameList);
+        //console.log(gameList);
+        return gameList;
     }
 
-    getGamelistRepositories(gameList) {
-
+    identifyGameList(gameList) {
+        gameList.forEach(function (game, key) {
+            game.id = key;
+        });
+        return gameList;
     }
+
+    //getGamelistRepositories(gameList) {
+    //
+    //}
 
     updateRepositories(downloadStatusCallback, endDownloadingCallback) {
         var repositories = this.configurator.getRepositories();
@@ -306,6 +317,60 @@ class Manager {
         }
 
         if (callback) callback(game);
+    }
+
+    filterGames(gameList, keyword, repository, lang, onlyInstalled) {
+        if (repository) {
+            gameList = this.filterGamesBy(gameList, this.isFoundRepository, repository);
+        }
+
+        if (lang) {
+            gameList = this.filterGamesBy(gameList, this.isFoundLang, lang);
+        }
+
+        if (onlyInstalled) {
+            gameList = this.filterGamesBy(gameList, this.isFoundOnlyInstalled, onlyInstalled);
+        }
+
+        if (keyword) {
+            gameList = this.filterGamesBy(gameList, this.isFoundKeyword, keyword);
+        }
+
+        return gameList;
+    }
+
+    filterGamesBy(gameList, foundCallback, value) {
+        var filteredGameList = [];
+        gameList.forEach(function (game) {
+            var isFound = foundCallback(game, value);
+            if (isFound) {
+                filteredGameList.push(game);
+            }
+        });
+
+        return filteredGameList;
+    }
+
+    isFoundKeyword(game, value) {
+        var keywordRegEx = new RegExp('.*' + Manager.escapeRegExp(value) + '.*', 'i');
+        return keywordRegEx.exec(game.title) || keywordRegEx.exec(game.name);
+    }
+
+    isFoundRepository(game, value) {
+        return value == game.repositoryFilename || value == game.repositoryFilename + '.xml';
+    }
+
+    isFoundLang(game, value) {
+        return game.langs.indexOf(value) != -1;
+    }
+
+    isFoundOnlyInstalled(game, value) {
+        return value == game.installed;
+    }
+
+    // see: https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
+    static escapeRegExp(str) {
+        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 }
 

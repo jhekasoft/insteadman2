@@ -8,7 +8,7 @@
 }
 
 #games_list_container {
-    overflow: scroll;
+    overflow: auto;
     height: 400px;
 }
 

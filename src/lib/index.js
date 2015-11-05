@@ -50,7 +50,7 @@ var ManGui = {
         $(item).addClass('info');
 
         $('#game_block').data('game_id', gameId);
-        $('#game_title').text(game.title);
+        $('#game_title').html(game.title);
 
         $("#game_logo").attr("src", ($("#game_logo").data("default-src")));
         if (game.image) {
@@ -195,7 +195,21 @@ var ManGui = {
         ManGui.fillFilterRepositories();
         ManGui.fillFilterLanguages();
 
+        ManGui.filterGames();
+
         $("#manager_loader").hide();
+    },
+
+    filterGames: function() {
+        var keyword = $('#filter_keyword').val();
+        var repository = $('#filter_repository').val();
+        var language = $('#filter_language').val();
+        var onlyInstalled = $('#filter_only_installed').prop('checked');
+        var filteredGamesList = manager.filterGames(globalGamesList, keyword, repository, language, onlyInstalled);
+        $('.games_list_item').hide();
+        filteredGamesList.forEach(function (game) {
+            $('#game_list_item-' + game.id).show();
+        });
     },
 
     redrawGui: function() {
@@ -301,6 +315,22 @@ $('#game_confirm_delete').click(function () {
         $btn.button('reset');
         $('#game_delete_confirm_dialog').modal('hide');
     });
+});
+
+$('#filter_keyword').keyup(function () {
+    ManGui.filterGames();
+});
+
+$('#filter_repository').change(function () {
+    ManGui.filterGames();
+});
+
+$('#filter_language').change(function () {
+    ManGui.filterGames();
+});
+
+$('#filter_only_installed').change(function () {
+    ManGui.filterGames();
 });
 
 // Update repository files or just render list

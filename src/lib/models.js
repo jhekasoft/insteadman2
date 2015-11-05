@@ -2,6 +2,7 @@
 
 class Game {
     constructor() {
+        this.id = null; // It will be set for recognizing game objects
         this.title = null;
         this.name = null;
         this.version = null;
