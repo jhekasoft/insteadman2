@@ -94,9 +94,16 @@ class Manager {
         var files = glob.sync(this.configurator.getGamesPath() + "*");
         var gameList = [];
         files.forEach(function (gameFile) {
-            var game = new gameClass();
-            // TODO: idf
-            game.name = path.basename(gameFile);
+            let game = new gameClass();
+            let gameName = path.basename(gameFile);
+
+            // IDF
+            let match = /(.*)\.idf$/i.exec(gameName);
+            if (match) {
+                gameName = match[1];
+            }
+
+            game.name = gameName;
             game.title = game.name;
             game.installed = true;
             gameList.push(game);
@@ -281,7 +288,17 @@ class Manager {
 
     runGame(game, callback) {
         var runningGameName = game.name;
-        // TODO: idf check and change runningGameName
+
+        console.log(this.configurator.getGamesPath() + runningGameName + '.idf');
+
+        // IDF
+        try {
+            var stat = fs.statSync(this.configurator.getGamesPath() + runningGameName + '.idf');
+        } catch (err) {
+        }
+        if (stat) {
+            runningGameName += '.idf';
+        }
 
         this.executeRunGameCommand(runningGameName, callback);
     }
