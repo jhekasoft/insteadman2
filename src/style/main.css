@@ -40,6 +40,6 @@ body, .btn-default {
     width: 70px;
 }
 
-.form-group-right {
+.form-group-right, .btn-group-right {
     float: right;
 }
