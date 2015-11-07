@@ -17,7 +17,6 @@ class Manager {
         this.version = '2.0.1';
         this.webPage = 'http://instead.club';
         this.updateCheckUrl = 'https://raw.githubusercontent.com/jhekasoft/insteadman/master/version.json';
-        this.defaultLang = 'en';
         if (!(configurator instanceof configuratorClass)) {
             throw "Wrong Configurator instance.";
         }
@@ -424,16 +423,6 @@ class Manager {
         }).on('error', function(e) {
             callback(false, e.message);
         });
-    }
-
-    readI18n(lang) {
-        try {
-            var i18nRaw = fs.readFileSync('./resources/i18n/' + lang + '.json', 'utf8');
-        } catch (e) {
-            var i18nRaw = fs.readFileSync('./resources/i18n/' + this.defaultLang + '.json', 'utf8');
-        }
-
-        return JSON.parse(i18nRaw);
     }
 }
 

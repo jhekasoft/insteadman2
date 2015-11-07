@@ -267,6 +267,7 @@ var ManGui = {
                 $('#update_check_ok_updated').show();
             } else if (result) {
                 isNeedUpdate = true;
+                $('#update_check_current_version').text(manager.version);
                 if (result.last_version) {
                     $('#update_check_new_version').text(result.last_version);
                 }
@@ -274,9 +275,18 @@ var ManGui = {
                     $('#update_check_new_version_link').attr('href', result.download_link);
                     $('#update_check_new_version_link').text(result.download_link);
                 }
-                if (result.release_notes) {
-                    $('#update_check_new_version_release_notes').html(result.release_notes);
+
+                var defaultReleaseNotesField = 'release_notes';
+                var releaseNotesField = defaultReleaseNotesField;
+                if (manager.configurator.getLang() != manager.configurator.defaultLang) {
+                    releaseNotesField = defaultReleaseNotesField + '_' + manager.configurator.getLang();
                 }
+                if (result[releaseNotesField]) {
+                    $('#update_check_new_version_release_notes').html(result[releaseNotesField]);
+                } else if (result[defaultReleaseNotesField]) {
+                    $('#update_check_new_version_release_notes').html(result[defaultReleaseNotesField]);
+                }
+
                 $('#update_check_ok_need_update').show();
             } else {
                 $('#update_check_failed').show();
@@ -340,7 +350,7 @@ $('#game_install').click(function () {
 });
 
 // i18n begin --------------------------
-var i18nData = manager.readI18n('ru');
+var i18nData = manager.configurator.readI18n(manager.configurator.getLang(), true);
 var translate = i18nData.i18n;
 var i18nAttributes = [
     {id: 'filter_keyword', attr: 'placeholder'},
@@ -394,8 +404,14 @@ $('#repository_update').click(function () {
 $('#settings').click(function () {
     manager.configurator.read();
     $('#settings_instead_command').val(manager.configurator.getInterpreterCommand());
-
     $('#settings_instead_command_help').html("&nbsp;");
+
+    var availableLanguages = manager.configurator.getAvailableLanguages();
+    $("#settings_lang").html('');
+    availableLanguages.forEach(function (lang) {
+        $("#settings_lang").append($('<option>', {value: lang.lang, text: lang.title}));
+    });
+    $('#settings_lang').val(manager.configurator.getLang());
 
     $('#settings_dialog').modal('show');
 });
@@ -445,6 +461,7 @@ $('#settings_save').click(function () {
     var $btn = $(this).button('loading');
 
     manager.configurator.setInterpreterPath($('#settings_instead_command').val());
+    manager.configurator.setLang($('#settings_lang').val());
     manager.configurator.save();
 
     $btn.button('reset');
@@ -473,6 +490,8 @@ $('#filter').click(function () {
     } else {
         $('#filter_container').hide();
     }
+
+    ManGui.redrawGui();
 });
 
 $('#game_run').click(function () {

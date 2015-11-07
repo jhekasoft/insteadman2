@@ -2,9 +2,12 @@
 
 var fs = require('fs-extra');
 var expandHomeDir = require('expand-home-dir');
+var glob = require("glob");
+var path = require("path");
 
 class Configurator {
     constructor() {
+        this.defaultLang = 'en';
         this.interpreterGamePath = "~/.instead/games/";
         this.configPath = "~/.instead/manager/";
         this.configFilename = "instead-manager-settings.json";
@@ -25,6 +28,7 @@ class Configurator {
         this.repositoriesPath = this.configPath + "repositories/";
         this.tempGamePath = this.configPath + "games/";
         this.skeletonPath = './resources/skeleton/';
+        this.i18nPath = './resources/i18n/';
     }
 
     getRepositoriesPath() {
@@ -99,6 +103,10 @@ class Configurator {
         this.setValue("interpreter_command", interpretorPath);
     }
 
+    setLang(lang) {
+        this.setValue("lang", lang);
+    }
+
     save() {
         var configRaw = JSON.stringify(this.configData, null, '  ');
         try {
@@ -120,6 +128,34 @@ class Configurator {
         if (!isDirectoryExists) {
             fs.mkdirSync(path);
         }
+    }
+
+    readI18n(lang, fallback) {
+        try {
+            var i18nRaw = fs.readFileSync(this.i18nPath + lang + '.json', 'utf8');
+        } catch (e) {
+            if (!fallback) {
+                return false;
+            }
+            var i18nRaw = fs.readFileSync(this.i18nPath + this.defaultLang + '.json', 'utf8');
+        }
+
+        return JSON.parse(i18nRaw);
+    }
+
+    getAvailableLanguages() {
+        var fullPaths = glob.sync(this.i18nPath + '*.json');
+        var langs = [];
+        var configurator = this;
+        fullPaths.forEach(function (fullPath) {
+            let lang = path.basename(fullPath, '.json');
+            let i18n = configurator.readI18n(lang);
+            if (i18n.lang) {
+                langs.push({lang: lang, title: i18n.lang});
+            }
+        });
+
+        return langs;
     }
 }
 
