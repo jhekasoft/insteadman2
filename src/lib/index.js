@@ -220,6 +220,7 @@ var ManGui = {
 
         ManGui.filterGames();
 
+        $("#main").show();
         $("#manager_loader").hide();
     },
 
@@ -320,7 +321,7 @@ $('#game_install').click(function () {
 
             if (!game) {
                 ManGui.render();
-                return ManGui.showError("Installation error", "Installation has failed. Please check INSTEAD command in settings.");
+                return ManGui.showError(t("Installation error"), t("Installation has failed. Please check INSTEAD command in settings."));
             }
 
             var percents = 100;
@@ -337,6 +338,54 @@ $('#game_install').click(function () {
         }
     )
 });
+
+// i18n begin --------------------------
+var i18nData = manager.readI18n('ru');
+var translate = i18nData.i18n;
+var i18nAttributes = [
+    {id: 'filter_keyword', attr: 'placeholder'},
+    {id: 'filter_repository', attr: 'data-label'},
+    {id: 'filter_language', attr: 'data-label'},
+    {id: 'repository_update', attr: 'data-loading-text'},
+    {id: 'game_install', attr: 'data-loading-text'},
+    {id: 'game_confirm_delete', attr: 'data-loading-text'},
+    {id: 'settings_save', attr: 'data-loading-text'},
+    {id: 'settings_about_check_update', attr: 'data-loading-text'},
+    {id: 'game_info_external', attr: 'title'},
+    {id: 'filter_reset', attr: 'title'},
+    {id: 'settings_instead_command_help', attr: 'data-detected-ok-text'},
+    {id: 'settings_instead_command_help', attr: 'data-detected-fail-text'},
+    {id: 'settings_instead_command_help', attr: 'data-tested-ok-text'},
+    {id: 'settings_instead_command_help', attr: 'data-tested-fail-text'}
+];
+function t(key) {
+    if (!translate[key]) {
+        return key;
+    }
+
+
+    return translate[key];
+}
+$('.i18n').each(function () {
+    var key = ($(this).html().trim());
+    if (translate[key]) {
+        $(this).html(translate[key]);
+    }
+});
+i18nAttributes.forEach(function (i18nItem) {
+    var $el = $('#' + i18nItem.id);
+    if ($el.length < 1) {
+        return;
+    }
+
+    var key = $el.attr(i18nItem.attr);
+    if (!translate[key]) {
+        return;
+    }
+
+    $el.attr(i18nItem.attr, translate[key]);
+});
+// i18n end ----------------------------
 
 $('#repository_update').click(function () {
     ManGui.updateRepositories(this);
@@ -434,7 +483,7 @@ $('#game_run').click(function () {
             return console.log("Running " + gameName + ".");
         }
 
-        ManGui.showError("Running error", "Running has failed. Please check INSTEAD command in settings.");
+        ManGui.showError(t("Running error"), t("Running has failed. Please check INSTEAD command in settings."));
     });
 });
 

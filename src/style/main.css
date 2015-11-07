@@ -2,6 +2,13 @@ body, .btn-default {
     background-color: #f9f9f9;
 }
 
+#manager_loader {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    width: 100px;
+}
+
 #games_list {
     background-color: #fff;
 }
@@ -37,7 +44,7 @@ body, .btn-default {
 }
 
 #filter_repository {
-    width: 140px;
+    width: 120px;
 }
 
 #filter_language {
