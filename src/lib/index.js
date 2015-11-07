@@ -252,6 +252,10 @@ var ManGui = {
         });
 
         chooser.trigger('click');
+    },
+
+    showUpdateCheking: function() {
+        $('#update_dialog').modal('show');
     }
 };
 
@@ -374,6 +378,10 @@ $('#settings_save').click(function () {
         }
         location.reload();
     });
+});
+
+$('#settings_about_check_update').click(function () {
+    ManGui.showUpdateCheking();
 });
 
 $('#filter').click(function () {
