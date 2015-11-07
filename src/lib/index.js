@@ -254,8 +254,39 @@ var ManGui = {
         chooser.trigger('click');
     },
 
-    showUpdateCheking: function() {
-        $('#update_dialog').modal('show');
+    showUpdateCheking: function(showOnlyIfNeedUpdate, callback) {
+        $('#update_check_failed').hide();
+        $('#update_check_ok_updated').hide();
+        $('#update_check_ok_need_update').hide();
+
+        manager.checkUpdate(function (result) {
+            var isNeedUpdate = false;
+
+            if ('last' == result) {
+                $('#update_check_ok_updated').show();
+            } else if (result) {
+                isNeedUpdate = true;
+                if (result.last_version) {
+                    $('#update_check_new_version').text(result.last_version);
+                }
+                if (result.download_link) {
+                    $('#update_check_new_version_link').attr('href', result.download_link);
+                    $('#update_check_new_version_link').text(result.download_link);
+                }
+                if (result.release_notes) {
+                    $('#update_check_new_version_release_notes').html(result.release_notes);
+                }
+                $('#update_check_ok_need_update').show();
+            } else {
+                $('#update_check_failed').show();
+            }
+
+            if ((showOnlyIfNeedUpdate && isNeedUpdate) || !showOnlyIfNeedUpdate) {
+                $('#update_dialog').modal('show');
+            }
+
+            if (callback) callback(result);
+        });
     }
 };
 
@@ -381,7 +412,10 @@ $('#settings_save').click(function () {
 });
 
 $('#settings_about_check_update').click(function () {
-    ManGui.showUpdateCheking();
+    var $btn = $(this).button('loading');
+    ManGui.showUpdateCheking(false, function() {
+        $btn.button('reset');
+    });
 });
 
 $('#filter').click(function () {
@@ -469,6 +503,9 @@ if (repositoryFiles.length < 1) {
 } else {
     ManGui.render();
 }
+
+// Check updating
+ManGui.showUpdateCheking(true);
 
 $(window).load(function () {
     ManGui.redrawGui();

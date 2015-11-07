@@ -4,6 +4,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var glob = require("glob");
 var http = require('follow-redirects').http;
+var https = require('follow-redirects').https;
 var statusBar = require('status-bar');
 var xml2js = require('xml2js');
 var childProcess = require('child_process');
@@ -15,6 +16,7 @@ class Manager {
     constructor(configurator, interpreterFinder) {
         this.version = '2.0.1beta';
         this.webPage = 'http://instead.club';
+        this.updateCheckUrl = 'https://raw.githubusercontent.com/jhekasoft/insteadman/master/version.json';
         if (!(configurator instanceof configuratorClass)) {
             throw "Wrong Configurator instance.";
         }
@@ -395,6 +397,32 @@ class Manager {
     // see: https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
     static escapeRegExp(str) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    }
+
+    checkUpdate(callback) {
+        var manager = this;
+        https.get(this.updateCheckUrl, function(res) {
+            var body = '';
+            res.on('data', function(data) {
+                body += data;
+            });
+            res.on('end', function() {
+                var result = null;
+                try {
+                    var result = JSON.parse(body);
+                } catch (e) {
+                    return callback('last');
+                }
+
+                if (result.last_version && result.last_version !== manager.version) {
+                    return callback(result);
+                } else {
+                    return callback('last');
+                }
+            });
+        }).on('error', function(e) {
+            callback(false, e.message);
+        });
     }
 }
 

@@ -174,7 +174,7 @@
                                             <p>
                                                 <strong>Version:</strong>
                                                 <span id="about_version"></span>
-                                                <button id="settings_about_check_update" class="btn btn-default btn-sm">Check update</button>
+                                                <button id="settings_about_check_update" class="btn btn-default btn-sm" data-loading-text="Checking...">Check update</button>
                                             </p>
                                             <p><strong>WWW:</strong> <a href="#" target="_blank" id="about_web_page"></a></p>
                                             <p><strong>Author:</strong> <a href="http://jhekasoft.net" target="_blank">Evgeniy Efremov aka jhekasoft</a></p>
@@ -202,7 +202,18 @@
                             <h4 class="modal-title"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Update</h4>
                         </div>
                         <div class="modal-body">
-                            Check
+                            <div id="update_check_failed" class="text-danger">
+                                Can't check updates. Please check your connection.
+                            </div>
+                            <div id="update_check_ok_updated" class="text-success">
+                                You have the latest version!
+                            </div>
+                            <div id="update_check_ok_need_update">
+                                <p class="text-info">There is a new version.</p>
+                                <p><strong>Version:</strong> <span id="update_check_new_version"></span></p>
+                                <p><strong>Download link:</strong> <a id="update_check_new_version_link" href="#" target="_blank"></a></p>
+                                <div id="update_check_new_version_release_notes"></div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button id="update_close" class="btn btn-default" data-dismiss="modal">Close</button>
