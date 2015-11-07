@@ -6,13 +6,17 @@ body, .btn-default {
     background-color: #fff;
 }
 
+.game_size_col {
+    text-align: right;
+}
+
 #game_title {
     text-align: center;
 }
 
 #game_logo {
-    width: 220px;
-    max-height: 240px;
+    max-width: 100%;
+    max-height: 50%;
 }
 
 #games_list_container {
@@ -37,7 +41,7 @@ body, .btn-default {
 }
 
 #filter_language {
-    width: 70px;
+    width: 80px;
 }
 
 .form-group-right, .btn-group-right {

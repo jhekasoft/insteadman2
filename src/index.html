@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title>InsteadMan</title>
@@ -29,7 +29,7 @@
                         </p>
                         <form id="filter_container" class="form-inline" onsubmit="return false;">
                             <div class="form-group">
-                                <input type="email" class="form-control" id="filter_keyword" placeholder="Search">
+                                <input type="text" class="form-control" id="filter_keyword" placeholder="Search">
                             </div>
                             <div class="form-group">
                                 <select class="form-control" id="filter_repository" data-label="Repo">
@@ -41,10 +41,8 @@
                                     <option value="">Lang</option>
                                 </select>
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input id="filter_only_installed" value="1" type="checkbox"> Installed
-                                </label>
+                            <div class="form-group">
+                                <button id="filter_only_installed" class="btn btn-default" data-toggle="button" aria-pressed="false" autocomplete="off">Installed</button>
                             </div>
                             <div class="form-group form-group-right">
                                 <button id="filter_reset" class="btn btn-link" title="Reset filter"><span class="glyphicon glyphicon-remove"></span></button>
@@ -107,10 +105,10 @@
                         </div>
                         <div class="modal-body">
                             <p>Do you really want to remove <strong id="game_delete_confirmation_title"></strong> game?</p>
-                            <p>
-                                <button id="game_confirm_cancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                <button id="game_confirm_delete" class="btn btn-danger" data-game_id="" data-loading-text="Removing...">Remove</button>
-                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="game_confirm_delete" class="btn btn-danger" data-game_id="" data-loading-text="Removing...">Remove</button>
+                            <button id="game_confirm_cancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -128,7 +126,71 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="settings_dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title"><span class="glyphicon glyphicon-cog"></span>&nbsp;Settings</h4>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#settings_main" aria-controls="settings_main" role="tab" data-toggle="tab">Main</a></li>
+                                <li role="presentation"><a href="#settings_about" aria-controls="settings_about" role="tab" data-toggle="tab">About</a></li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="settings_main">
+                                    <p></p>
+                                    <div class="form-group">
+                                        <label for="settings_instead_command">INSTEAD interpreter</label>
+                                        <input type="text" class="form-control" id="settings_instead_command">
+                                        <p></p>
+                                        <div class="btn-group btn-group-right" role="group" aria-label="...">
+                                            <button type="button" class="btn btn-default" id="settings_instead_command_browse">Browse...</button>
+                                            <button type="button" class="btn btn-default" id="settings_instead_command_detect">Detect</button>
+                                            <button type="button" class="btn btn-default" id="settings_instead_command_test">Test</button>
+                                        </div>
+                                        <p id="settings_instead_command_help"
+                                           data-detected-ok-text="INSTEAD has found. Click Test button."
+                                           data-detected-fail-text="INSTEAD hasn't found. Please install INSTEAD and try again or click Browse... button."
+                                           data-tested-ok-text="INSTEAD {version} has found!"
+                                           data-tested-fail-text="INSTEAD hasn't found. Please check path.">&nbsp;</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="settins_lang">Languge</label>
+                                        <select class="form-control" id="settins_lang"></select>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="settings_about">
+                                    <h2 id="about_title" data-default-text="">InsteadMan <small>INSTEAD manager</small></h2>
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <img id="about_logo" src="./resources/images/logo.png" alt="InsteadMan">
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <p><strong>Version:</strong> <span id="about_version"></span></p>
+                                            <p><strong>WWW:</strong> <a href="#" target="_blank" id="about_web_page"></a></p>
+                                            <p><strong>Author:</strong> <a href="http://jhekasoft.net" target="_blank">Evgeniy Efremov aka jhekasoft</a></p>
+                                            <p><strong>INSTEAD author:</strong> <a href="http://syscall.ru" target="_blank">Peter Kosyh</a></p>
+                                            <p><strong>License:</strong> MIT</p>
+                                            <p>&copy; 2015 InsteadMan</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="settings_save" class="btn btn-primary" data-loading-text="Saving...">Save</button>
+                            <button id="settings_close" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <input id="file_chooser" type="file" style="display: none;">
 
         <script src="./lib/index.js"></script>
     </body>

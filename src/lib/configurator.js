@@ -95,6 +95,10 @@ class Configurator {
         this.configData[name] = value;
     }
 
+    setInterpreterPath(interpretorPath) {
+        this.setValue("interpreter_command", interpretorPath);
+    }
+
     save() {
         var configRaw = JSON.stringify(this.configData, null, '  ');
         try {

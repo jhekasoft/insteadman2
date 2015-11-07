@@ -100,6 +100,7 @@ class InsteadInterpreterFinderWin extends InsteadInterpreterFinder {
     }
 }
 
+module.exports.InsteadInterpreterFinder = InsteadInterpreterFinder;
 module.exports.InsteadInterpreterFinderMac = InsteadInterpreterFinderMac;
 module.exports.InsteadInterpreterFinderFreeUnix = InsteadInterpreterFinderFreeUnix;
 module.exports.InsteadInterpreterFinderWin = InsteadInterpreterFinderWin;

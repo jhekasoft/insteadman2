@@ -1,4 +1,5 @@
 var os = require('os');
+var path = require('path');
 var gui = require('nw.gui');
 var statusBar = require('status-bar');
 var interpreterFinderLib = require('./lib/interpreter_finder');
@@ -8,7 +9,7 @@ var managerLib = require('./lib/manager');
 if ("win32" == os.platform()) {
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderWin;
     var configurator = new configuratorLib.ConfiguratorWin;
-    var manager = new managerLib.ManagerWin(configurator);
+    var manager = new managerLib.ManagerWin(configurator, insteadInterpreterFinder);
 } else if ("darwin" == os.platform()) {
     var mb = new gui.Menu({type:"menubar"});
     mb.createMacBuiltin("Insteadman");
@@ -32,11 +33,11 @@ if ("win32" == os.platform()) {
     //            console.log("ok");
     //        }
 
-    var manager = new managerLib.ManagerMac(configurator);
+    var manager = new managerLib.ManagerMac(configurator, insteadInterpreterFinder);
 } else {
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderFreeUnix;
     var configurator = new configuratorLib.ConfiguratorFreeUnix;
-    var manager = new managerLib.ManagerFreeUnix(configurator);
+    var manager = new managerLib.ManagerFreeUnix(configurator), insteadInterpreterFinder;
 }
 
 var bar = statusBar.create({ total: 0 });
@@ -176,8 +177,8 @@ var ManGui = {
             }
             gamesHtml += '<tr class="games_list_item ' + rowClass + '" id="game_list_item-' + id + '" data-id="' + id + '">' +
                     '<td>' + gameTitle + '</td><td>' + game.version + '</td>' +
-                    '<td>' +
-                        '<span class="game_size">' + bar.format.storage(game.size) + '</span>' +
+                    '<td class="game_size_col">' +
+                        '<span class="game_size">' + bar.format.storage(game.size).replace(/(.*)(\s)(.*)$/, '$1&nbsp;$3') + '</span>' +
                         '<div class="game_progress progress" style="display: none;">' +
                             '<div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">' +
                                 '<span class="sr-only">0%</span>' +
@@ -187,6 +188,11 @@ var ManGui = {
                     '</tr>';
         });
         $('#games_list').append(gamesHtml);
+
+        // About block
+        $('#about_version').text(manager.version);
+        $('#about_web_page').attr('href', manager.webPage);
+        $('#about_web_page').text(manager.webPage);
 
         // Add version to default game title
         var defaultGameTitle = $("#game_title").data("default-text");
@@ -221,7 +227,7 @@ var ManGui = {
         var keyword = $('#filter_keyword').val();
         var repository = $('#filter_repository').val();
         var language = $('#filter_language').val();
-        var onlyInstalled = $('#filter_only_installed').prop('checked');
+        var onlyInstalled = 'true' == $('#filter_only_installed').attr('aria-pressed');
         var filteredGamesList = manager.filterGames(globalGamesList, keyword, repository, language, onlyInstalled);
         $('.games_list_item').hide();
         filteredGamesList.forEach(function (game) {
@@ -231,6 +237,21 @@ var ManGui = {
 
     redrawGui: function() {
         $('#games_list_container').css('height', $(window).innerHeight() - $('#header_container').outerHeight() - 26);
+    },
+
+    chooseFile: function(defaultFilePath, callback) {
+        var chooser = $('#file_chooser');
+
+        if (defaultFilePath) {
+            chooser.attr('nwworkingdir', path.dirname(defaultFilePath));
+        }
+
+        chooser.unbind('change');
+        chooser.change(function(evt) {
+            if (callback && $(this).val()) callback($(this).val());
+        });
+
+        chooser.trigger('click');
     }
 };
 
@@ -287,12 +308,72 @@ $('#repository_update').click(function () {
 });
 
 $('#settings').click(function () {
-    for(module in global.require.cache){
-        if(global.require.cache.hasOwnProperty(module)){
-            delete global.require.cache[module];
+    manager.configurator.read();
+    $('#settings_instead_command').val(manager.configurator.getInterpreterCommand());
+
+    $('#settings_instead_command_help').html("&nbsp;");
+
+    $('#settings_dialog').modal('show');
+});
+
+$('#settings_instead_command_browse').click(function () {
+    ManGui.chooseFile($('#settings_instead_command').val(), function (filePath) {
+        if (filePath) $('#settings_instead_command').val(filePath);
+    });
+});
+
+$('#settings_instead_command_detect').click(function () {
+    $('#settings_instead_command_help').html("&nbsp;");
+    $('#settings_instead_command_help').removeClass('text-danger');
+    $('#settings_instead_command_help').removeClass('text-success');
+
+    manager.interpreterFinder.findInterpreter(function (filePath) {
+        if (filePath) {
+            $('#settings_instead_command').val(filePath);
+            $('#settings_instead_command_help').text($('#settings_instead_command_help').data('detected-ok-text'));
+            $('#settings_instead_command_help').addClass('text-success');
+            return;
         }
-    }
-    location.reload()
+
+        $('#settings_instead_command_help').text($('#settings_instead_command_help').data('detected-fail-text'));
+        $('#settings_instead_command_help').addClass('text-danger');
+    });
+});
+
+$('#settings_instead_command_test').click(function () {
+    $('#settings_instead_command_help').html("&nbsp;");
+    $('#settings_instead_command_help').removeClass('text-danger');
+    $('#settings_instead_command_help').removeClass('text-success');
+
+    manager.interpreterFinder.checkInterpreter($('#settings_instead_command').val(), function (version) {
+        if (version) {
+            $('#settings_instead_command_help').text($('#settings_instead_command_help').data('tested-ok-text').replace('{version}', version));
+            $('#settings_instead_command_help').addClass('text-success');
+            return;
+        };
+
+        $('#settings_instead_command_help').text($('#settings_instead_command_help').data('tested-fail-text'));
+        $('#settings_instead_command_help').addClass('text-danger');
+    });
+});
+
+$('#settings_save').click(function () {
+    var $btn = $(this).button('loading');
+
+    manager.configurator.setInterpreterPath($('#settings_instead_command').val());
+    manager.configurator.save();
+
+    $btn.button('reset');
+    $('#settings_dialog').modal('hide');
+
+    $('#settings_dialog').on('hidden.bs.modal', function (e) {
+        for(module in global.require.cache){
+            if(global.require.cache.hasOwnProperty(module)){
+                delete global.require.cache[module];
+            }
+        }
+        location.reload();
+    });
 });
 
 $('#filter').click(function () {
@@ -358,15 +439,18 @@ $('#filter_language').change(function () {
     ManGui.filterGames();
 });
 
-$('#filter_only_installed').change(function () {
-    ManGui.filterGames();
+$('#filter_only_installed').click(function () {
+    setTimeout(function () {
+        ManGui.filterGames();
+    }, 50);
 });
 
 $('#filter_reset').click(function () {
     $('#filter_keyword').val('');
     $('#filter_repository').val('');
     $('#filter_language').val('');
-    $('#filter_only_installed').prop('checked', false);
+    $('#filter_only_installed').attr('aria-pressed', 'false');
+    $('#filter_only_installed').removeClass('active');
     ManGui.filterGames();
 });
 
@@ -384,4 +468,9 @@ $(window).load(function () {
 
 $(window).resize(function () {
     ManGui.redrawGui();
+});
+
+$('a[target=_blank]').on('click', function(){
+    require('nw.gui').Shell.openExternal( this.href );
+    return false;
 });
