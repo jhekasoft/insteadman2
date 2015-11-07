@@ -4,9 +4,16 @@ var fs = require('fs-extra');
 var expandHomeDir = require('expand-home-dir');
 var glob = require("glob");
 var path = require("path");
+var interpreterFinderClass = require('./interpreter_finder').InsteadInterpreterFinder;
 
 class Configurator {
-    constructor() {
+    constructor(interpreterFinder) {
+        if (!(interpreterFinder instanceof interpreterFinderClass)) {
+            throw "Wrong InterpreterFinder instance.";
+        }
+        this.interpreterFinder = interpreterFinder;
+
+        this.managerVersion = '2.0.1';
         this.defaultLang = 'en';
         this.interpreterGamePath = "~/.instead/games/";
         this.configPath = "~/.instead/manager/";
@@ -44,12 +51,22 @@ class Configurator {
         this.checkAndCreateDirectory(this.repositoriesPath);
         this.checkAndCreateDirectory(this.tempGamePath);
         this.checkAndCreateDirectory(this.interpreterGamePath);
-        
-        // TODO: create recursive dir, copy skeleton config, write default settings
+
         try {
             fs.statSync(this.configFilePath).isFile()
         } catch (err) {
             fs.copySync(this.skeletonPath + this.configFilename, this.configFilePath);
+
+            // Default settings
+            this.read();
+
+            this.setVersion(this.managerVersion);
+
+            var interpreterPath = this.interpreterFinder.findInterpreterSync();
+            if (!interpreterPath) interpreterPath = '';
+            this.setInterpreterPath(interpreterPath);
+
+            this.save();
         }
     }
 
@@ -92,6 +109,10 @@ class Configurator {
         return expandHomeDir(this.getValue("games_path"))
     }
 
+    getVersion() {
+        return this.getValue("version");
+    }
+
     setValue(name, value) {
         // Read config if it empty
         this.getAll();
@@ -105,6 +126,10 @@ class Configurator {
 
     setLang(lang) {
         this.setValue("lang", lang);
+    }
+
+    setVersion(version) {
+        this.setValue("version", version);
     }
 
     save() {
@@ -126,7 +151,7 @@ class Configurator {
         }
 
         if (!isDirectoryExists) {
-            fs.mkdirSync(path);
+            fs.mkdirsSync(path);
         }
     }
 

@@ -9,22 +9,18 @@ var statusBar = require('status-bar');
 var xml2js = require('xml2js');
 var childProcess = require('child_process');
 var configuratorClass = require('./configurator').Configurator;
-var interpreterFinderClass = require('./interpreter_finder').InsteadInterpreterFinder;
 var gameClass = require('./models').Game;
 
 class Manager {
-    constructor(configurator, interpreterFinder) {
-        this.version = '2.0.1';
+    constructor(configurator) {
         this.webPage = 'http://instead.club';
         this.updateCheckUrl = 'https://raw.githubusercontent.com/jhekasoft/insteadman/master/version.json';
         if (!(configurator instanceof configuratorClass)) {
             throw "Wrong Configurator instance.";
         }
-        if (!(interpreterFinder instanceof interpreterFinderClass)) {
-            throw "Wrong InterpreterFinder instance.";
-        }
         this.configurator = configurator;
-        this.interpreterFinder = interpreterFinder;
+        this.interpreterFinder = this.configurator.interpreterFinder;
+        this.version = this.configurator.managerVersion;
     }
 
     getRepositoryFiles(onlyFilenames) {

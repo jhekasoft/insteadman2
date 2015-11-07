@@ -16,19 +16,24 @@ class InsteadInterpreterFinder {
     }
 
     findInterpreter(callback) {
+        callback(this.findInterpreterSync());
+    }
+
+    findInterpreterSync() {
         var isFound = false;
+        var interpreterPath = false;
         var here = this;
         this.exactFilePaths.forEach(function(path) {
+            if (isFound) {
+                return;
+            }
             if (here.checkInterpreterPath(path)) {
+                interpreterPath = path;
                 isFound = true;
-                callback(path);
-                return false;
             }
         });
 
-        if (!isFound) {
-            callback(false);
-        }
+        return interpreterPath;
     }
 
     checkInterpreterPath(path) {
@@ -40,13 +45,6 @@ class InsteadInterpreterFinder {
     }
 
     checkInterpreter(interpreterCommand, callback) {
-        //try {
-        //    var result = childProcess.execSync("which ls", {encoding: "ascii"});
-        //    console.log(result);
-        //} catch (err) {
-        //    console.log('fail');
-        //}
-
         childProcess.exec(interpreterCommand + " -version", function(error, stdout, stderr) {
             if (error) {
                 callback(false);
@@ -71,7 +69,7 @@ class InsteadInterpreterFinderFreeUnix extends InsteadInterpreterFinder {
 
     // TODO: check
     findInterpreter(callback) {
-        var interpreterCommand = "instead"
+        var interpreterCommand = "instead";
         childProcess.exec("which " + interpreterCommand, function(error, stdout, stderr) {
             if (error) {
                 callback(false);
@@ -79,6 +77,20 @@ class InsteadInterpreterFinderFreeUnix extends InsteadInterpreterFinder {
                 callback(interpreterCommand);
             }
         });
+    }
+
+    findInterpreterSync() {
+        var interpreterCommand = "instead";
+        try {
+            var result = childProcess.execSync("which " + interpreterCommand);
+            if (!result || 0 == result.length) {
+                return false;
+            }
+        } catch(e) {
+            return false;
+        }
+
+        return interpreterCommand;
     }
 }
 

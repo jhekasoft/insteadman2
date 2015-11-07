@@ -8,8 +8,8 @@ var managerLib = require('./lib/manager');
 
 if ("win32" == os.platform()) {
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderWin;
-    var configurator = new configuratorLib.ConfiguratorWin;
-    var manager = new managerLib.ManagerWin(configurator, insteadInterpreterFinder);
+    var configurator = new configuratorLib.ConfiguratorWin(insteadInterpreterFinder);
+    var manager = new managerLib.ManagerWin(configurator);
 } else if ("darwin" == os.platform()) {
     var mb = new gui.Menu({type:"menubar"});
     mb.createMacBuiltin("Insteadman");
@@ -17,27 +17,13 @@ if ("win32" == os.platform()) {
 
     
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderMac;
-    //        insteadInterpreterFinder.findInterpreter(function(interpreterPath) {
-    //            insteadInterpreterFinder.checkInterpreter(interpreterPath, function(version) {
-    //                version = version || "not found";
-    //                document.getElementById('interpreter_version').innerText = version;
-    //            });
-    //        });
+    var configurator = new configuratorLib.ConfiguratorMac(insteadInterpreterFinder);
 
-    var configurator = new configuratorLib.ConfiguratorMac;
-    //        console.log(configurator.getValue("lang"));
-    //        console.log(configurator.getValue("lang1"));
-    //        configurator.setValue("lang1", "dd");
-    //        console.log(configurator.getAll());
-    //        if (configurator.save()) {
-    //            console.log("ok");
-    //        }
-
-    var manager = new managerLib.ManagerMac(configurator, insteadInterpreterFinder);
+    var manager = new managerLib.ManagerMac(configurator);
 } else {
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderFreeUnix;
-    var configurator = new configuratorLib.ConfiguratorFreeUnix;
-    var manager = new managerLib.ManagerFreeUnix(configurator), insteadInterpreterFinder;
+    var configurator = new configuratorLib.ConfiguratorFreeUnix(insteadInterpreterFinder);
+    var manager = new managerLib.ManagerFreeUnix(configurator);
 }
 
 var bar = statusBar.create({ total: 0 });
@@ -411,7 +397,11 @@ $('#settings').click(function () {
     availableLanguages.forEach(function (lang) {
         $("#settings_lang").append($('<option>', {value: lang.lang, text: lang.title}));
     });
-    $('#settings_lang').val(manager.configurator.getLang());
+    var lang = manager.configurator.getLang();
+    if (!lang || 0 == lang.length) {
+        lang = manager.configurator.defaultLang;
+    }
+    $('#settings_lang').val(lang);
 
     $('#settings_dialog').modal('show');
 });
@@ -564,12 +554,12 @@ $('#filter_reset').click(function () {
     ManGui.filterGames();
 });
 
-// Update repository files or just render list
+ManGui.render();
+
+// Update repository files if it is needed
 var repositoryFiles = manager.getRepositoryFiles();
 if (repositoryFiles.length < 1) {
     ManGui.updateRepositories($('#repository_update'));
-} else {
-    ManGui.render();
 }
 
 // Check updating
