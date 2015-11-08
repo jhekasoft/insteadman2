@@ -45,7 +45,7 @@ class InsteadInterpreterFinder {
     }
 
     checkInterpreter(interpreterCommand, callback) {
-        childProcess.exec(interpreterCommand + " -version", function(error, stdout, stderr) {
+        childProcess.exec('"' + interpreterCommand + '" -version', function(error, stdout, stderr) {
             if (error) {
                 callback(false);
             } else {
@@ -82,7 +82,7 @@ class InsteadInterpreterFinderFreeUnix extends InsteadInterpreterFinder {
     findInterpreterSync() {
         var interpreterCommand = "instead";
         try {
-            var result = childProcess.execSync("which " + interpreterCommand);
+            var result = childProcess.execSync("which " + interpreterCommand, {encoding: 'utf-8'});
             if (!result || 0 == result.length) {
                 return false;
             }
@@ -96,18 +96,18 @@ class InsteadInterpreterFinderFreeUnix extends InsteadInterpreterFinder {
 
 class InsteadInterpreterFinderWin extends InsteadInterpreterFinder {
 
-    // TODO: finish and check
     constructor() {
         super();
 
-        // mountvol /
-        // [A-Z]+:.*$
-        var drives = ["C:\\", "D:\\"];
+        var finder = this;
+
+        var mountResult = childProcess.execSync("mountvol /", {encoding: 'utf-8'});
+        var drives = mountResult.match(/[A-Z]+:.*/g);
         drives.forEach(function(drive) {
-            this.exactFilePaths.push(drive + "Program Files\\Games\\INSTEAD\\sdl-instead.exe");
-            this.exactFilePaths.push(drive + "Program Files (x86)\\Games\\INSTEAD\\sdl-instead.exe");
-            this.exactFilePaths.push(drive + "Program Files\\INSTEAD\\sdl-instead.exe");
-            this.exactFilePaths.push(drive + "Program Files (x86)\\INSTEAD\\sdl-instead.exe");
+            finder.exactFilePaths.push(drive + "Program Files\\Games\\INSTEAD\\sdl-instead.exe");
+            finder.exactFilePaths.push(drive + "Program Files (x86)\\Games\\INSTEAD\\sdl-instead.exe");
+            finder.exactFilePaths.push(drive + "Program Files\\INSTEAD\\sdl-instead.exe");
+            finder.exactFilePaths.push(drive + "Program Files (x86)\\INSTEAD\\sdl-instead.exe");
         })
     }
 }

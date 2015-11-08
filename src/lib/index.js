@@ -316,6 +316,7 @@ $('#game_install').click(function () {
             console.log(game);
 
             if (!game) {
+                $btn.button('reset');
                 ManGui.render();
                 return ManGui.showError(t("Installation error"), t("Installation has failed. Please check INSTEAD command in settings."));
             }
@@ -436,7 +437,7 @@ $('#settings_instead_command_test').click(function () {
     $('#settings_instead_command_help').removeClass('text-success');
 
     manager.interpreterFinder.checkInterpreter($('#settings_instead_command').val(), function (version) {
-        if (version) {
+        if (false !== version) {
             $('#settings_instead_command_help').text($('#settings_instead_command_help').data('tested-ok-text').replace('{version}', version));
             $('#settings_instead_command_help').addClass('text-success');
             return;

@@ -15,8 +15,12 @@ class Configurator {
 
         this.managerVersion = '2.0.1';
         this.defaultLang = 'en';
-        this.interpreterGamePath = "~/.instead/games/";
-        this.configPath = "~/.instead/manager/";
+        if (!this.interpreterGamePath) {
+            this.interpreterGamePath = "~/.instead/games/";
+        }
+        if (!this.configPath) {
+            this.configPath = "~/.instead/manager/";
+        }
         this.configFilename = "instead-manager-settings.json";
         this.configData = {};
 
@@ -30,12 +34,12 @@ class Configurator {
 
     updateBasePaths() {
         this.interpreterGamePath = expandHomeDir(this.interpreterGamePath);
+        this.configFilePath = expandHomeDir(this.configPath + this.configFilename);
+        this.repositoriesPath = expandHomeDir(this.configPath + "repositories/");
+        this.tempGamePath = expandHomeDir(this.configPath + "games/");
+        this.skeletonPath = expandHomeDir('./resources/skeleton/');
+        this.i18nPath = expandHomeDir('./resources/i18n/');
         this.configPath = expandHomeDir(this.configPath);
-        this.configFilePath = this.configPath + this.configFilename;
-        this.repositoriesPath = this.configPath + "repositories/";
-        this.tempGamePath = this.configPath + "games/";
-        this.skeletonPath = './resources/skeleton/';
-        this.i18nPath = './resources/i18n/';
     }
 
     getRepositoriesPath() {
@@ -106,7 +110,8 @@ class Configurator {
     }
 
     getGamesPath() {
-        return expandHomeDir(this.getValue("games_path"))
+        return this.interpreterGamePath;
+        // return expandHomeDir(this.getValue("games_path"))
     }
 
     getVersion() {
@@ -193,9 +198,11 @@ class ConfiguratorFreeUnix extends Configurator {
 }
 
 class ConfiguratorWin extends Configurator {
-    constructor() {
-        super();
-        this.configPath = "~\\Local Settings\\Application Data\\instead\\manager\\";
+    constructor(interpreterFinder) {
+        this.interpreterGamePath = "~/Local Settings/Application Data/instead/games/";
+        this.configPath = "~/Local Settings/Application Data/instead/manager/";
+
+        super(interpreterFinder);
     }
 }
 
