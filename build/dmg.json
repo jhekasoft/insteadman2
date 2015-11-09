@@ -1,0 +1,10 @@
+{
+  "title": "InsteadMan",
+  "icon": "../src/resources/images/logo.icns",
+  "background": "dmg_background.png",
+  "icon-size": 80,
+  "contents": [
+    { "x": 390, "y": 200, "type": "link", "path": "/Applications" },
+    { "x": 114, "y": 200, "type": "file", "path": "InsteadMan.app" }
+  ]
+}

@@ -216,9 +216,10 @@ class Manager {
     }
 
     executeInstallGameCommand(gameFilepath, callback) {
-        var interpreterCommand = this.configurator.getInterpreterCommand();
+        var interpreterCommand = this.configurator.getComputedInterpreterCommand();
         var command = '"' + interpreterCommand + '" -install "' + gameFilepath + '" -quit';
-        console.log(command);
+        console.log('Run command: ' + command);
+
         childProcess.exec(command, function(error, stdout, stderr) {
             if (error) {
                 if (callback) callback(false);
@@ -278,8 +279,9 @@ class Manager {
     }
 
     executeRunGameCommand(gameName, callback) {
-        var interpreterCommand = this.configurator.getInterpreterCommand();
+        var interpreterCommand = this.configurator.getComputedInterpreterCommand();
         var command = '"' + interpreterCommand + '" -game "' + gameName + '"';
+        console.log('Run command: ' + command);
 
         childProcess.exec(command, function(error, stdout, stderr) {
             if (error) {
@@ -292,8 +294,6 @@ class Manager {
 
     runGame(game, callback) {
         var runningGameName = game.name;
-
-        console.log(this.configurator.getGamesPath() + runningGameName + '.idf');
 
         // IDF
         try {

@@ -284,6 +284,22 @@ var ManGui = {
 
             if (callback) callback(result);
         });
+    },
+
+    settingsChangeBuiltInInterpreter: function(active) {
+        if (active) {
+            $('#settings_instead_command_use_builtin').attr('aria-pressed', 'true');
+            $('#settings_instead_command_use_builtin').addClass('active');
+            $('#settings_instead_command_browse').attr('disabled', true);
+            $('#settings_instead_command_detect').attr('disabled', true);
+            $('#settings_instead_command').attr('readonly', true);
+        } else {
+            $('#settings_instead_command_use_builtin').attr('aria-pressed', 'false');
+            $('#settings_instead_command_use_builtin').removeClass('active');
+            $('#settings_instead_command_browse').attr('disabled', false);
+            $('#settings_instead_command_detect').attr('disabled', false);
+            $('#settings_instead_command').attr('readonly', false);
+        }
     }
 };
 
@@ -391,6 +407,13 @@ $('#repository_update').click(function () {
 $('#settings').click(function () {
     manager.configurator.read();
     $('#settings_instead_command').val(manager.configurator.getInterpreterCommand());
+
+    var canUseBuiltInInterpreter = manager.configurator.canUseBuiltInInterpreter();
+    ManGui.settingsChangeBuiltInInterpreter(canUseBuiltInInterpreter);
+    if (!canUseBuiltInInterpreter && !manager.configurator.interpreterFinder.isAvailableBuiltIn()) {
+        $('#settings_instead_command_use_builtin').hide();
+    }
+
     $('#settings_instead_command_help').html("&nbsp;");
 
     var availableLanguages = manager.configurator.getAvailableLanguages();
@@ -405,6 +428,14 @@ $('#settings').click(function () {
     $('#settings_lang').val(lang);
 
     $('#settings_dialog').modal('show');
+});
+
+$('#settings_instead_command_use_builtin').click(function () {
+    var here = this;
+    setTimeout(function () {
+        ManGui.settingsChangeBuiltInInterpreter('true' == $(here).attr('aria-pressed'));
+    }, 100);
+
 });
 
 $('#settings_instead_command_browse').click(function () {
@@ -436,7 +467,12 @@ $('#settings_instead_command_test').click(function () {
     $('#settings_instead_command_help').removeClass('text-danger');
     $('#settings_instead_command_help').removeClass('text-success');
 
-    manager.interpreterFinder.checkInterpreter($('#settings_instead_command').val(), function (version) {
+    var interpreterCommand = $('#settings_instead_command').val();
+    if ('true' == $('#settings_instead_command_use_builtin').attr('aria-pressed')) {
+        interpreterCommand = manager.configurator.interpreterFinder.getBuiltInPath();
+    }
+
+    manager.interpreterFinder.checkInterpreter(interpreterCommand, function (version) {
         if (false !== version) {
             $('#settings_instead_command_help').text($('#settings_instead_command_help').data('tested-ok-text').replace('{version}', version));
             $('#settings_instead_command_help').addClass('text-success');
@@ -451,7 +487,10 @@ $('#settings_instead_command_test').click(function () {
 $('#settings_save').click(function () {
     var $btn = $(this).button('loading');
 
+    console.log($('#settings_instead_command_use_builtin').attr('aria-pressed'));
+
     manager.configurator.setInterpreterPath($('#settings_instead_command').val());
+    manager.configurator.setUseBuiltInInterpreter('true' == $('#settings_instead_command_use_builtin').attr('aria-pressed'));
     manager.configurator.setLang($('#settings_lang').val());
     manager.configurator.save();
 

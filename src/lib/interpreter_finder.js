@@ -9,6 +9,7 @@ class InsteadInterpreterFinder {
     constructor() {
         this.downloadLink = 'http://instead.syscall.ru/ru/download/';
         this.exactFilePaths = [];
+        this.builtInPath = null; // built-in INSTEAD interpreter path (with InsteadMan)
     }
 
     getDownloadLink() {
@@ -53,11 +54,21 @@ class InsteadInterpreterFinder {
             }
         });
     }
+
+    isAvailableBuiltIn() {
+        return this.checkInterpreterPath(this.builtInPath);
+    }
+
+    getBuiltInPath() {
+        return this.builtInPath;
+    }
 }
 
 class InsteadInterpreterFinderMac extends InsteadInterpreterFinder {
     constructor() {
         super();
+
+        this.builtInPath = '../../MacOS/sdl-instead';
         this.exactFilePaths = [
             '/Applications/Instead.app/Contents/MacOS/sdl-instead'
         ];
@@ -66,6 +77,12 @@ class InsteadInterpreterFinderMac extends InsteadInterpreterFinder {
 }
 
 class InsteadInterpreterFinderFreeUnix extends InsteadInterpreterFinder {
+
+    constructor() {
+        super();
+
+        this.builtInPath = null;
+    }
 
     // TODO: check
     findInterpreter(callback) {

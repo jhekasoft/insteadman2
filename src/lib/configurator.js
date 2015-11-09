@@ -109,6 +109,14 @@ class Configurator {
         return this.getValue("interpreter_command");
     }
 
+    getComputedInterpreterCommand() {
+       if (this.canUseBuiltInInterpreter()) {
+           return this.interpreterFinder.getBuiltInPath();
+       } else {
+           return this.getInterpreterCommand();
+       }
+    }
+
     getGamesPath() {
         return this.interpreterGamePath;
         // return expandHomeDir(this.getValue("games_path"))
@@ -116,6 +124,20 @@ class Configurator {
 
     getVersion() {
         return this.getValue("version");
+    }
+
+    getUseBuiltInInterpreter() {
+        return this.getValue("use_builtin_interpreter");
+    }
+
+    canUseBuiltInInterpreter() {
+        // If isn't disabled usage and built-in interpreter is available
+        var useBuiltInInterpreter = this.getUseBuiltInInterpreter();
+        if (false !== useBuiltInInterpreter && this.interpreterFinder.isAvailableBuiltIn()) {
+            return true;
+        };
+
+        return useBuiltInInterpreter;
     }
 
     setValue(name, value) {
@@ -135,6 +157,10 @@ class Configurator {
 
     setVersion(version) {
         this.setValue("version", version);
+    }
+
+    setUseBuiltInInterpreter(useBuilInInterpreter) {
+        return this.setValue("use_builtin_interpreter", useBuilInInterpreter);
     }
 
     save() {
