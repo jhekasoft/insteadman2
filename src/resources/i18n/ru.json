@@ -56,6 +56,7 @@
     "Installation error": "Ошибка установки",
     "Installation has failed. Please check INSTEAD command in settings.": "Установка не удалась. Проверьте команду INSTEAD в настройках.",
     "Running error": "Ошибка запуска",
-    "Running has failed. Please check INSTEAD command in settings.": "Запуск не удался. Проверьте команду INSTEAD в настройках."
+    "Running has failed. Please check INSTEAD command in settings.": "Запуск не удался. Проверьте команду INSTEAD в настройках.",
+    "Use built-in": "Встроенный"
   }
 }

@@ -19,3 +19,22 @@ Run in `src` dir:
 ```
 path\to\nwjs .
 ```
+
+Distribution
+-------------
+
+### Mac OS X
+
+**1. Create InsteadMan.app in the `build` directory.**
+
+**2. Build `dmg`-package**
+
+```
+npm install -g appdmg
+```
+
+At the `build` directory:
+
+```
+appdmg dmg.json InsteadMan-2.0.1.dmg
+```
