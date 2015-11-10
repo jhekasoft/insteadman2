@@ -369,7 +369,8 @@ var i18nAttributes = [
     {id: 'settings_instead_command_help', attr: 'data-detected-ok-text'},
     {id: 'settings_instead_command_help', attr: 'data-detected-fail-text'},
     {id: 'settings_instead_command_help', attr: 'data-tested-ok-text'},
-    {id: 'settings_instead_command_help', attr: 'data-tested-fail-text'}
+    {id: 'settings_instead_command_help', attr: 'data-tested-fail-text'},
+    {id: 'settings_instead_command', attr: 'placeholder'}
 ];
 function t(key) {
     if (!translate[key]) {
