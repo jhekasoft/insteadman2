@@ -77,14 +77,6 @@ class InsteadInterpreterFinderMac extends InsteadInterpreterFinder {
 }
 
 class InsteadInterpreterFinderFreeUnix extends InsteadInterpreterFinder {
-
-    constructor() {
-        super();
-
-        this.builtInPath = null;
-    }
-
-    // TODO: check
     findInterpreter(callback) {
         var interpreterCommand = "instead";
         childProcess.exec("which " + interpreterCommand, function(error, stdout, stderr) {
