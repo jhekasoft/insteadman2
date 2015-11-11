@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var childProcess = require('child_process');
+var path = require('path');
 
 // TODO: can find several interpreters
 class InsteadInterpreterFinder {
@@ -107,6 +108,8 @@ class InsteadInterpreterFinderWin extends InsteadInterpreterFinder {
 
     constructor() {
         super();
+
+        this.builtInPath = path.dirname(process.execPath) + "\\sdl-instead.exe";
 
         var finder = this;
 

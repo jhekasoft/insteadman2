@@ -38,3 +38,15 @@ At the `build` directory:
 ```
 appdmg dmg.json InsteadMan-2.0.1.dmg
 ```
+
+### Windows
+
+**1. Pack `src` content to the `app.nw`.
+
+**2. Run in directory witn nw.exe:
+
+```
+copy /b nw.exe+app.nw instead.exe
+```
+
+![alt text](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/logo.png "InsteadMan")

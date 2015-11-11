@@ -27,9 +27,6 @@ class Configurator {
         this.configFilePath = null;
         this.repositoriesPath = null;
         this.tempGamePath = null;
-        this.updateBasePaths();
-
-        this.checkAndCreateDirectoriesAndFiles();
     }
 
     updateBasePaths() {
@@ -216,19 +213,32 @@ class Configurator {
 }
 
 class ConfiguratorMac extends Configurator {
+    constructor(interpreterFinder) {
+        super(interpreterFinder);
 
+        this.updateBasePaths();
+        this.checkAndCreateDirectoriesAndFiles();
+    }
 }
 
 class ConfiguratorFreeUnix extends Configurator {
+    constructor(interpreterFinder) {
+        super(interpreterFinder);
 
+        this.updateBasePaths();
+        this.checkAndCreateDirectoriesAndFiles();
+    }
 }
 
 class ConfiguratorWin extends Configurator {
     constructor(interpreterFinder) {
+        super(interpreterFinder);
+
         this.interpreterGamePath = "~/Local Settings/Application Data/instead/games/";
         this.configPath = "~/Local Settings/Application Data/instead/manager/";
 
-        super(interpreterFinder);
+        this.updateBasePaths();
+        this.checkAndCreateDirectoriesAndFiles();
     }
 }
 
