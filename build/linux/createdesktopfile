@@ -1,0 +1,36 @@
+#!/bin/bash 
+# Creates .desktop file for InsteadMan
+
+dir=`pwd`
+exec="$dir/insteadman"
+icon="$dir/icon.png"
+desktopdir="$HOME/.local/share/applications"
+desktopfile="$desktopdir/insteadman.desktop"
+homedesktopdir="$HOME/Desktop"
+homedesktopfile="$homedesktopdir/insteadman.desktop"
+
+tpl="[Desktop Entry]
+Version=1.0
+Name=InsteadMan
+Name[ru]=InsteadMan
+Name[uk]=InsteadMan
+Comment=INSTEAD Manager
+Comment[ru]=INSTEAD менеджер
+Comment[uk]=INSTEAD менеджер
+Exec=%s
+Icon=%s
+Terminal=false
+Type=Application
+Categories=Application;"
+
+desktopcontent=`printf "$tpl" "$exec" "$icon"`
+
+mkdir "-p" "$desktopdir"
+touch "-a" "$desktopfile"
+echo "$desktopcontent" > "$desktopfile"
+chmod "+x" "$desktopfile"
+
+mkdir "-p" "$homedesktopdir"
+ln "-s" "$desktopfile" "$homedesktopfile"
+
+echo "Created"

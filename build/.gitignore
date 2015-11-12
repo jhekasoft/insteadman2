@@ -1,3 +1,6 @@
-/*.app
-/*.dmg
+/linux/temp
+/mac/*.app
+/mac/*.dmg
+/windows/InsteadMan_Windows
+/windows/temp
 /nwjs/
