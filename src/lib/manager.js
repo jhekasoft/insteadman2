@@ -325,7 +325,7 @@ class Manager {
                 // rmdir recursively
                 this.deleteFolder(filename);
             } else {
-                // rm fiilename
+                // rm filename
                 fs.unlinkSync(filename);
             }
         }
@@ -333,14 +333,32 @@ class Manager {
     };
 
     deleteGame(game, callback) {
-        var gameFolderPath = this.configurator.getGamesPath() + game.name;
-        var gameIdfPath    = this.configurator.getGamesPath() + game.name + ".idf";
+        var gamePath = this.configurator.getGamesPath() + game.name;
 
-        if (fs.existsSync(gameFolderPath)) {
-            this.deleteFolder(gameFolderPath);
+        var stat = null;
+        try {
+            stat = fs.statSync(gamePath);
+        } catch (err) {
+            var gamePath = this.configurator.getGamesPath() + game.name + ".idf";
+            try {
+                stat = fs.statSync(gamePath);
+            } catch (err) {
+                if (callback) callback(false);
+                console.error("File/directory doesn't exist (" + err.message + ")");
+                return;
+            }
         }
-        if (fs.existsSync(gameIdfPath)) {
-            fs.unlinkSync(gameIdfPath);
+
+        try {
+            if (stat.isDirectory()) {
+                this.deleteFolder(gamePath);
+            } else {
+                fs.unlinkSync(gamePath);
+            }
+        } catch (err) {
+            if (callback) callback(false);
+            console.error("File/directory removing error (" + err.message + ")");
+            return;
         }
 
         if (callback) callback(game);

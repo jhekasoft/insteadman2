@@ -1,12 +1,18 @@
 InsteadMan
 ===========
 
-Manager for INSTEAD interpreter. Version 2.0. There is beta version.
-First version is [here](https://github.com/jhekasoft/instead-manager).
+Manager for INSTEAD interpreter. Version 2.
+Old version is [here](https://github.com/jhekasoft/instead-manager).
+
+Download
+---------
+
+Please download releases here: [http://instead.club](http://instead.club) .
 
 ![alt text](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot.png "InsteadMan GUI")
 
 ![alt text](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot_gnulinux.png "InsteadMan GUI GNU/Linux")
+
 
 Development run
 ----------------
@@ -19,7 +25,7 @@ npm install
 Run in `src` dir:
 
 ```
-path\to\nwjs .
+path/to/nwjs .
 ```
 
 Distribution

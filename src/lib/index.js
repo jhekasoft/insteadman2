@@ -102,14 +102,14 @@ var ManGui = {
     confirmDeletion: function(gameId) {
         var game = globalGamesList[gameId];
         $('#game_delete_confirmation_title').text(game.title);
-        $('#game_confirm_delete').data('game_id', gameId);
+        $('#game_confirm_delete').data('game_id', gameId).button('reset');
         $('#game_delete_confirm_dialog').modal('show');
     },
 
     deleteGame: function(gameId, callback) {
         var game = globalGamesList[gameId];
-        manager.deleteGame(game, function() {
-            if (callback) callback();
+        manager.deleteGame(game, function(game) {
+            if (callback) callback(game);
             ManGui.render();
             ManGui.selectGame(gameId, $('#game_list_item-' + gameId));
         });
@@ -558,7 +558,8 @@ $('#game_confirm_delete').click(function () {
     var gameId = $(this).data('game_id');
 
     var $btn = $(this).button('loading');
-    ManGui.deleteGame(gameId, function () {
+    ManGui.deleteGame(gameId, function (game) {
+        console.log(game);
         $btn.button('reset');
         $('#game_delete_confirm_dialog').modal('hide');
     });
