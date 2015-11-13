@@ -258,6 +258,10 @@ class Manager {
             res.pipe(file);
             res.pipe(bar);
 
+            file.on('hangup', function () {
+
+            });
+
             file.on('finish', function () {
                 file.close(function() {
                     fs.move(tempPartGameFilepath, tempGameFilepath, {clobber: true}, function (err) {
@@ -275,6 +279,7 @@ class Manager {
             fs.unlink(tempPartGameFilepath);
             if (bar) bar.cancel();
             console.error(err);
+            endInstallationCallback(false);
         });
     }
 
