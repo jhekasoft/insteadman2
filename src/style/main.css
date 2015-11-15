@@ -26,6 +26,19 @@ body, .btn-default {
     max-height: 50%;
 }
 
+#game_logo.active {
+    cursor: pointer;
+}
+
+#image_dialog_image {
+    max-width: 100%;
+    max-height: 94%;
+}
+
+#image_dialog .modal-content {
+    cursor: pointer;
+}
+
 #games_list_container {
     overflow: auto;
     height: 400px;

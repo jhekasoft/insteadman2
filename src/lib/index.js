@@ -40,8 +40,10 @@ var ManGui = {
         $('#game_title').html(game.title);
 
         $("#game_logo").attr("src", ($("#game_logo").data("default-src")));
+        $('#game_logo').removeClass('active');
         if (game.image) {
             $('#game_logo').attr('src', game.image);
+            $('#game_logo').addClass('active');
         }
 
         if (game.repositoryFilename) {
@@ -537,6 +539,15 @@ $('#game_run').click(function () {
     });
 });
 
+$('#game_logo').click(function () {
+    var gameId = $(this).parents('#game_block').data('game_id');
+    var game = globalGamesList[gameId];
+    if (game.image) {
+        $('#image_dialog_image').attr('src', game.image);
+        $('#image_dialog').modal('show');
+    }
+});
+
 $('#game_info_external').click(function () {
     var gameId = $(this).parents('#game_block').data('game_id');
     var game = globalGamesList[gameId];
@@ -547,6 +558,13 @@ $('#game_info').click(function () {
     var gameId = $(this).parents('#game_block').data('game_id');
     var game = globalGamesList[gameId];
     var infoWindow = gui.Window.open(game.descurl, {toolbar: false, focus: true});
+    infoWindow.on ('loaded', function(){
+        $(infoWindow.window).keyup(function(e){
+            if(e.keyCode == 27){
+                infoWindow.close();
+            }
+        });
+    });
 });
 
 $('#game_delete').click(function () {
