@@ -6,23 +6,24 @@ var interpreterFinderLib = require('./lib/interpreter_finder');
 var configuratorLib = require('./lib/configurator');
 var managerLib = require('./lib/manager');
 
+var locale = window.navigator.language;
+
 if ("win32" == os.platform()) {
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderWin;
-    var configurator = new configuratorLib.ConfiguratorWin(insteadInterpreterFinder);
+    var configurator = new configuratorLib.ConfiguratorWin(insteadInterpreterFinder, locale);
     var manager = new managerLib.ManagerWin(configurator);
 } else if ("darwin" == os.platform()) {
     var mb = new gui.Menu({type:"menubar"});
     mb.createMacBuiltin("Insteadman");
     gui.Window.get().menu = mb;
-
     
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderMac;
-    var configurator = new configuratorLib.ConfiguratorMac(insteadInterpreterFinder);
+    var configurator = new configuratorLib.ConfiguratorMac(insteadInterpreterFinder, locale);
 
     var manager = new managerLib.ManagerMac(configurator);
 } else {
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderFreeUnix;
-    var configurator = new configuratorLib.ConfiguratorFreeUnix(insteadInterpreterFinder);
+    var configurator = new configuratorLib.ConfiguratorFreeUnix(insteadInterpreterFinder, locale);
     var manager = new managerLib.ManagerFreeUnix(configurator);
 }
 
