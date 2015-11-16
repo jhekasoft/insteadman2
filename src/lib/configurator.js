@@ -7,13 +7,13 @@ var path = require("path");
 var interpreterFinderClass = require('./interpreter_finder').InsteadInterpreterFinder;
 
 class Configurator {
-    constructor(interpreterFinder, locale) {
+    constructor(interpreterFinder, version, locale) {
         if (!(interpreterFinder instanceof interpreterFinderClass)) {
             throw "Wrong InterpreterFinder instance.";
         }
         this.interpreterFinder = interpreterFinder;
 
-        this.managerVersion = '2.0.1';
+        this.managerVersion = version || null;
 
         // Default language
         this.defaultLang = 'en';
@@ -239,22 +239,22 @@ class Configurator {
 }
 
 class ConfiguratorMac extends Configurator {
-    constructor(interpreterFinder, locale) {
-        super(interpreterFinder, locale);
+    constructor(interpreterFinder, version, locale) {
+        super(interpreterFinder, version, locale);
         this.postConstructor(locale);
     }
 }
 
 class ConfiguratorFreeUnix extends Configurator {
-    constructor(interpreterFinder, locale) {
-        super(interpreterFinder, locale);
+    constructor(interpreterFinder, version, locale) {
+        super(interpreterFinder, version, locale);
         this.postConstructor(locale);
     }
 }
 
 class ConfiguratorWin extends Configurator {
-    constructor(interpreterFinder, locale) {
-        super(interpreterFinder, locale);
+    constructor(interpreterFinder, version, locale) {
+        super(interpreterFinder, version, locale);
 
         this.interpreterGamePath = "~/Local Settings/Application Data/instead/games/";
         this.configPath = "~/Local Settings/Application Data/instead/manager/";
