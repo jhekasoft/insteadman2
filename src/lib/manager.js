@@ -8,6 +8,7 @@ var https = require('follow-redirects').https;
 var statusBar = require('status-bar');
 var xml2js = require('xml2js');
 var childProcess = require('child_process');
+var manUtils = require('./manUtils');
 var configuratorClass = require('./configurator').Configurator;
 var gameClass = require('./models').Game;
 
@@ -397,7 +398,7 @@ class Manager {
     }
 
     isFoundKeyword(game, value) {
-        var keywordRegEx = new RegExp('.*' + Manager.escapeRegExp(value) + '.*', 'i');
+        var keywordRegEx = new RegExp('.*' + manUtils.escapeRegExp(value) + '.*', 'i');
         return keywordRegEx.exec(game.title) || keywordRegEx.exec(game.name);
     }
 
@@ -411,11 +412,6 @@ class Manager {
 
     isFoundOnlyInstalled(game, value) {
         return value == game.installed;
-    }
-
-    // see: https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
-    static escapeRegExp(str) {
-        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
     checkUpdate(callback) {
@@ -433,7 +429,7 @@ class Manager {
                     return callback('last');
                 }
 
-                if (result.last_version && result.last_version !== manager.version) {
+                if (result.last_version && manUtils.compareVersions(manager.version, '<', result.last_version)) {
                     return callback(result);
                 } else {
                     return callback('last');
