@@ -35,7 +35,6 @@ if ("win32" == os.platform()) {
 var bar = statusBar.create({ total: 0 });
 var globalGamesList = [];
 
-// TODO: Move Settings functions to the other place
 var ManGui = {
     selectGame: function(gameId, item) {
         var game = globalGamesList[gameId];
@@ -344,8 +343,6 @@ $('#game_install').click(function () {
         }
     )
 });
-
-// TODO: move i18n to the i18n.js
 
 // i18n begin --------------------------
 var i18nData = manager.configurator.readI18n(manager.configurator.getLang(), true);

@@ -4,17 +4,11 @@ var fs = require('fs');
 var childProcess = require('child_process');
 var path = require('path');
 
-// TODO: can find several interpreters
 class InsteadInterpreterFinder {
 
     constructor() {
-        this.downloadLink = 'http://instead.syscall.ru/ru/download/';
         this.exactFilePaths = [];
         this.builtInPath = null; // built-in INSTEAD interpreter path (with InsteadMan)
-    }
-
-    getDownloadLink() {
-        return this.downloadLink;
     }
 
     findInterpreter(callback) {
