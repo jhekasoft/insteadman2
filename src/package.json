@@ -12,7 +12,7 @@
   "main": "index.html",
   "window": {
     "icon": "resources/images/logo.png",
-    "toolbar": false,
+    "toolbar": true,
     "min_width": 770,
     "width": 770,
     "min_height": 500,

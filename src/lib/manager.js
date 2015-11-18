@@ -8,7 +8,7 @@ var https = require('follow-redirects').https;
 var statusBar = require('status-bar');
 var xml2js = require('xml2js');
 var childProcess = require('child_process');
-var manUtils = require('./manUtils');
+var manUtils = require('./man_utils');
 var configuratorClass = require('./configurator').Configurator;
 var gameClass = require('./models').Game;
 
