@@ -1,4 +1,4 @@
-InsteadMan
+![InsteadMan](https://raw.githubusercontent.com/jhekasoft/insteadman/master/src/resources/images/logo32x32.png "InsteadMan") InsteadMan
 ===========
 
 Manager for INSTEAD interpreter. Version 2.
@@ -9,9 +9,9 @@ Download
 
 Please download releases here: [http://instead.club](http://instead.club) .
 
-![alt text](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot.png "InsteadMan GUI")
+![InsteadMan GUI](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot.png "InsteadMan GUI")
 
-![alt text](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot_gnulinux.png "InsteadMan GUI GNU/Linux")
+![InsteadMan GUI GNU/Linux](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot_gnulinux.png "InsteadMan GUI GNU/Linux")
 
 
 Development run
@@ -77,4 +77,4 @@ appdmg dmg.json InsteadMan-2.0.1.dmg
 copy /b nw.exe+app.nw instead.exe
 ```
 
-![alt text](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/logo.png "InsteadMan")
+![InsteadMan](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/logo.png "InsteadMan")
