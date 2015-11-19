@@ -249,10 +249,11 @@ var ManGui = {
         chooser.trigger('click');
     },
 
-    showUpdateCheking: function(showOnlyIfNeedUpdate, callback) {
+    showUpdateChecking: function(showOnlyIfNeedUpdate, callback, showCheckOnStartOption) {
         $('#update_check_failed').hide();
         $('#update_check_ok_updated').hide();
         $('#update_check_ok_need_update').hide();
+        $('#check_update_on_start_label').hide();
 
         manager.checkUpdate(function (result) {
             var isNeedUpdate = false;
@@ -287,6 +288,12 @@ var ManGui = {
             }
 
             if ((showOnlyIfNeedUpdate && isNeedUpdate) || !showOnlyIfNeedUpdate) {
+                // Check update on start
+                if (showCheckOnStartOption) {
+                    $('#check_update_on_start').prop('checked', manager.configurator.canCheckUpdateOnStart());
+                    $('#check_update_on_start_label').show();
+                }
+
                 $('#update_dialog').modal('show');
             }
 
@@ -456,6 +463,12 @@ $('#filter_reset').click(function () {
     ManGui.filterGames();
 });
 
+$('#check_update_on_start').change(function () {
+    manager.configurator.setCheckUpdateOnStart($(this).prop('checked'));
+    manager.configurator.save();
+    manager.configurator.read();
+});
+
 ManGui.render();
 
 // Update repository files if it is needed
@@ -465,7 +478,9 @@ if (repositoryFiles.length < 1) {
 }
 
 // Check updating
-ManGui.showUpdateCheking(true);
+if (manager.configurator.canCheckUpdateOnStart()) {
+    ManGui.showUpdateChecking(true, null, true);
+}
 
 $(window).load(function () {
     ManGui.redrawGui();

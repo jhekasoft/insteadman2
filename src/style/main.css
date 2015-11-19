@@ -64,6 +64,12 @@ body, .btn-default {
     width: 80px;
 }
 
+#check_update_on_start_label {
+    float: left;
+    font-weight: normal;
+    margin-top: 6px;
+}
+
 .form-group-right, .btn-group-right {
     float: right;
 }

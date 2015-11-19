@@ -39,6 +39,8 @@ $('#settings').click(function () {
     }
     $('#settings_lang').val(lang);
 
+    $('#settings_check_update_on_start').prop('checked', manager.configurator.canCheckUpdateOnStart());
+
     $('#settings_dialog').modal('show');
 });
 
@@ -104,6 +106,7 @@ $('#settings_save').click(function () {
     manager.configurator.setInterpreterPath($('#settings_instead_command').val());
     manager.configurator.setUseBuiltInInterpreter('true' == $('#settings_instead_command_use_builtin').attr('aria-pressed'));
     manager.configurator.setLang($('#settings_lang').val());
+    manager.configurator.setCheckUpdateOnStart($('#settings_check_update_on_start').prop('checked'));
     manager.configurator.save();
 
     $btn.button('reset');
@@ -121,7 +124,7 @@ $('#settings_save').click(function () {
 
 $('#settings_about_check_update').click(function () {
     var $btn = $(this).button('loading');
-    ManGui.showUpdateCheking(false, function() {
+    ManGui.showUpdateChecking(false, function() {
         $btn.button('reset');
     });
 });

@@ -163,6 +163,14 @@ class Configurator {
         return useBuiltInInterpreter;
     }
 
+    getCheckUpdateOnStart() {
+        return this.getValue("check_update_on_start");
+    }
+
+    canCheckUpdateOnStart() {
+        return false !== this.getCheckUpdateOnStart();
+    }
+
     setValue(name, value) {
         // Read config if it empty
         this.getAll();
@@ -184,6 +192,10 @@ class Configurator {
 
     setUseBuiltInInterpreter(useBuilInInterpreter) {
         return this.setValue("use_builtin_interpreter", useBuilInInterpreter);
+    }
+
+    setCheckUpdateOnStart(checkUpdateOnStart) {
+        return this.setValue("check_update_on_start", checkUpdateOnStart);
     }
 
     save() {
