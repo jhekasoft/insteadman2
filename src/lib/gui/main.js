@@ -169,10 +169,15 @@ var ManGui = {
                 gameTitle = '<strong>' + gameTitle + '</strong>';
                 // rowClass = 'success';
             }
+
+            var gameSize = '';
+            if (game.size > 0) {
+                gameSize = bar.format.storage(game.size).replace(/(.*)(\s)(.*)$/, '$1&nbsp;$3');
+            }
             gamesHtml += '<tr class="games_list_item ' + rowClass + '" id="game_list_item-' + id + '" data-id="' + id + '">' +
                     '<td>' + gameTitle + '</td><td>' + game.version + '</td>' +
                     '<td class="game_size_col">' +
-                        '<span class="game_size">' + bar.format.storage(game.size).replace(/(.*)(\s)(.*)$/, '$1&nbsp;$3') + '</span>' +
+                        '<span class="game_size">' + gameSize + '</span>' +
                         '<div class="game_progress progress" style="display: none;">' +
                             '<div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">' +
                                 '<span class="sr-only">0%</span>' +

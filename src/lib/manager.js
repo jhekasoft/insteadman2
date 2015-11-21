@@ -98,19 +98,27 @@ class Manager {
     getLocalGameList() {
         var files = glob.sync(this.configurator.getGamesPath() + "*");
         var gameList = [];
+        var manager = this;
         files.forEach(function (gameFile) {
             let game = new gameClass();
             let gameName = path.basename(gameFile);
 
             // IDF
+            let isIdf = false;
             let match = /(.*)\.idf$/i.exec(gameName);
             if (match) {
                 gameName = match[1];
+                isIdf = true;
             }
 
             game.name = gameName;
             game.title = game.name;
             game.installed = true;
+
+            if (!isIdf) {
+                manager.addDirectoryGameData(game);
+            }
+
             gameList.push(game);
         });
 
@@ -438,6 +446,23 @@ class Manager {
         }).on('error', function(e) {
             callback(false, e.message);
         });
+    }
+
+    addDirectoryGameData(game)
+    {
+        var gamePath = this.configurator.getGamesPath() + game.name;
+        var mainLuaFilePath = path.join(gamePath, 'main.lua');
+        var mainLuaContent = fs.readFileSync(mainLuaFilePath, 'utf8');
+
+        let match = /--\s\$Name:\s*(.*)\$/i.exec(mainLuaContent);
+        if (match) {
+            game.title = match[1];
+        }
+
+        match = /--\s\$Version:\s*(.*)\$/i.exec(mainLuaContent);
+        if (match) {
+            game.version = match[1];
+        }
     }
 }
 
