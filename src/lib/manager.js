@@ -115,7 +115,9 @@ class Manager {
             game.title = game.name;
             game.installed = true;
 
-            if (!isIdf) {
+            if (isIdf) {
+                manager.addIdfGameData(game);
+            } else {
                 manager.addDirectoryGameData(game);
             }
 
@@ -448,11 +450,16 @@ class Manager {
         });
     }
 
-    addDirectoryGameData(game)
-    {
+    addDirectoryGameData(game) {
         var gamePath = this.configurator.getGamesPath() + game.name;
         var mainLuaFilePath = path.join(gamePath, 'main.lua');
-        var mainLuaContent = fs.readFileSync(mainLuaFilePath, 'utf8');
+
+        try {
+            var mainLuaContent = fs.readFileSync(mainLuaFilePath, 'utf8');
+        } catch (err) {
+            console.error("Error reading game info from " + mainLuaFilePath);
+            return false;
+        }
 
         let match = /--\s\$Name:\s*(.*)\$/i.exec(mainLuaContent);
         if (match) {
@@ -463,6 +470,33 @@ class Manager {
         if (match) {
             game.version = match[1];
         }
+
+        return game;
+    }
+
+    addIdfGameData(game) {
+        // TODO: get more effective method
+        var gamePath = this.configurator.getGamesPath() + game.name;
+        var idfFilePath = gamePath + '.idf';
+
+        try {
+            var idfContent = fs.readFileSync(idfFilePath, 'utf8');
+        } catch (err) {
+            console.error("Error reading game info from " + idfFilePath);
+            return false;
+        }
+
+        let match = /--\s\$Name:\s*(.*)\$/i.exec(idfContent);
+        if (match) {
+            game.title = match[1];
+        }
+
+        match = /--\s\$Version:\s*(.*)\$/i.exec(idfContent);
+        if (match) {
+            game.version = match[1];
+        }
+
+        return true;
     }
 }
 
