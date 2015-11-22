@@ -95,16 +95,28 @@ var ManGui = {
 
     showError: function(title, message) {
         $("#error_dialog_title").text(title);
-        $("#error_dialog_message").text(message);
+        $("#error_dialog_message").html(message);
         $('#error_dialog').modal('show');
     },
 
     updateRepositories: function(button) {
-        var $btn = $(button).button('loading')
-        manager.updateRepositories(null, function () {
-            $btn.button('reset');
-            ManGui.render();
-        });
+        var $btn = $(button).button('loading');
+        manager.updateRepositories(
+            function (repository, status) {
+                if (!status) {
+                    console.log(repository);
+                    return ManGui.showError(t("Updating error"),
+                        t("Can't update <strong>{repository}</strong> (URL: {repositoryUrl}) repository. Please check your connection.")
+                            .replace('{repository}', repository.name)
+                            .replace('{repositoryUrl}', repository.url)
+                    );
+                }
+            },
+            function () {
+                $btn.button('reset');
+                ManGui.render();
+            }
+        );
     },
 
     confirmDeletion: function(gameId) {
@@ -332,12 +344,17 @@ $('#game_install').click(function () {
             console.log(game);
             //ManGui.render();
         },
-        function (game) {
+        function (game, err) {
             console.log(game);
 
             if (!game) {
                 $btn.button('reset');
                 ManGui.render();
+
+                // Downloading error
+                if (err && "DOWNLOADERR" == err.code) {
+                    return ManGui.showError(t("Installation error"), t("Download has failed. Please check your connection."));
+                }
                 return ManGui.showError(t("Installation error"), t("Installation has failed. Please check INSTEAD command in settings."));
             }
 

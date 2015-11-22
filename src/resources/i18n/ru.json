@@ -58,6 +58,9 @@
     "Running error": "Ошибка запуска",
     "Running has failed. Please check INSTEAD command in settings.": "Запуск не удался. Проверьте команду INSTEAD в настройках.",
     "Use built-in": "Встроенный",
-    "Check update on start": "Проверять обновление при запуске"
+    "Check update on start": "Проверять обновление при запуске",
+    "Download has failed. Please check your connection.": "Загрузка не удалась. Проверьте Выше соединение.",
+    "Updating error": "Ошибка обновления",
+    "Can't update <strong>{repository}</strong> (URL: {repositoryUrl}) repository. Please check your connection.": "Не удалось обновить репозиторий <strong>{repository}</strong> (URL: {repositoryUrl}). Проверьте Ваше соединение."
   }
 }

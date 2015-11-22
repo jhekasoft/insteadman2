@@ -173,10 +173,6 @@ class Manager {
         return gameList;
     }
 
-    //getGamelistRepositories(gameList) {
-    //
-    //}
-
     updateRepositories(downloadStatusCallback, endDownloadingCallback) {
         var repositories = this.configurator.getRepositories();
         var repositoriesPath = this.configurator.getRepositoriesPath();
@@ -218,8 +214,15 @@ class Manager {
             }).on('error', function (err) {
                 if (bar) bar.cancel();
                 fs.unlink(repositoriesPath + filename);
+
+                // TODO: fix code duplicate
                 downloadedRepositoriesCount++;
+                if (downloadedRepositoriesCount >= repositories.length) {
+                    if (endDownloadingCallback) endDownloadingCallback(true);
+                }
+
                 console.error(err);
+                downloadStatusCallback(repository, false);
             });
         });
 
@@ -269,9 +272,9 @@ class Manager {
             res.pipe(file);
             res.pipe(bar);
 
-            file.on('hangup', function () {
-
-            });
+            //file.on('hangup', function () {
+            //
+            //});
 
             file.on('finish', function () {
                 file.close(function() {
@@ -290,7 +293,11 @@ class Manager {
             fs.unlink(tempPartGameFilepath);
             if (bar) bar.cancel();
             console.error(err);
-            endInstallationCallback(false);
+
+            // TODO: more pretty exception handling
+            var resErr = new Error(err.message);
+            resErr.code = "DOWNLOADERR";
+            endInstallationCallback(false, resErr);
         });
     }
 

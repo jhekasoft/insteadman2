@@ -58,6 +58,9 @@
     "Running error": "Помилка з'єднання",
     "Running has failed. Please check INSTEAD command in settings.": "Запуск невдалий. Перевірте команду INSTEAD в налаштуваннях.",
     "Use built-in": "Вбудований",
-    "Check update on start": "Перевіряти оновлення при запуску"
+    "Check update on start": "Перевіряти оновлення при запуску",
+    "Download has failed. Please check your connection.": "Завантаження не вдалося. Перевірте Ваше з'єднання.",
+    "Updating error": "Помилка оновлення",
+    "Can't update <strong>{repository}</strong> (URL: {repositoryUrl}) repository. Please check your connection.": "Не вдалося оновити репозиторій <strong>{repository}</strong> (URL: {repositoryUrl}). Перевірте Ваше з'єднання."
   }
 }
