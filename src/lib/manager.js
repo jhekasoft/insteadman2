@@ -472,12 +472,12 @@ class Manager {
             return false;
         }
 
-        let match = /--\s\$Name:\s*(.*)\$/i.exec(mainLuaContent);
+        let match = /--\s*\$Name:\s*(.*)\$/i.exec(mainLuaContent);
         if (match) {
             game.title = match[1];
         }
 
-        match = /--\s\$Version:\s*(.*)\$/i.exec(mainLuaContent);
+        match = /--\s*\$Version:\s*(.*)\$/i.exec(mainLuaContent);
         if (match) {
             game.installedVersion = game.version = match[1];
         }
@@ -497,12 +497,12 @@ class Manager {
             return false;
         }
 
-        let match = /--\s\$Name:\s*(.*)\$/i.exec(idfContent);
+        let match = /--\s*\$Name:\s*(.*)\$/i.exec(idfContent);
         if (match) {
             game.title = match[1];
         }
 
-        match = /--\s\$Version:\s*(.*)\$/i.exec(idfContent);
+        match = /--\s*\$Version:\s*(.*)\$/i.exec(idfContent);
         if (match) {
             game.installedVersion = game.version = match[1];
         }
