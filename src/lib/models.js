@@ -6,6 +6,7 @@ class Game {
         this.title = null;
         this.name = null;
         this.version = null;
+        this.installedVersion = null;
         this.langs = [];
         this.lang = null;
         this.url = null;
@@ -15,6 +16,7 @@ class Game {
         this.installed = false;
         this.onlyLocal = false;
         this.image = null;
+        this.isUpdateExist = false;
     }
 
     // TODO: move to other place

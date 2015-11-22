@@ -143,6 +143,10 @@ class Manager {
             localGameList.forEach(function (localGame) {
                 if (game.name == localGame.name) {
                     game.installed = true;
+                    game.installedVersion = localGame.installedVersion;
+                    if (manUtils.compareVersions(game.installedVersion, '<', game.version)) {
+                        game.isUpdateExist = true;
+                    }
                     localGame.onlyLocal = false;
                 }
             });
@@ -475,7 +479,7 @@ class Manager {
 
         match = /--\s\$Version:\s*(.*)\$/i.exec(mainLuaContent);
         if (match) {
-            game.version = match[1];
+            game.installedVersion = game.version = match[1];
         }
 
         return game;
@@ -500,7 +504,7 @@ class Manager {
 
         match = /--\s\$Version:\s*(.*)\$/i.exec(idfContent);
         if (match) {
-            game.version = match[1];
+            game.installedVersion = game.version = match[1];
         }
 
         return true;

@@ -12,9 +12,13 @@ module.exports = {
      * @param {string} v1
      * @param {string} comparator
      * @param {string} v2
-     * @returns {boolean}
+     * @returns {boolean|null}
      */
     compareVersions: function(v1, comparator, v2) {
+        if (!v1 || !v2) {
+            return null;
+        }
+
         comparator = comparator == '=' ? '==' : comparator;
         var v1parts = v1.split('.'), v2parts = v2.split('.');
         var maxLen = Math.max(v1parts.length, v2parts.length);

@@ -77,7 +77,11 @@ var ManGui = {
         }
 
         if (game.installed) {
-            $('#game_install').hide();
+            if (game.isUpdateExist) {
+                $('#game_install').show();
+            } else {
+                $('#game_install').hide();
+            }
             $('#game_run').show();
             $('#game_delete').show();
         } else {
@@ -186,8 +190,17 @@ var ManGui = {
             if (game.size > 0) {
                 gameSize = bar.format.storage(game.size).replace(/(.*)(\s)(.*)$/, '$1&nbsp;$3');
             }
+
+            var version = game.version;
+            if (game.isUpdateExist) {
+                version = game.installedVersion;
+                if (game.version != game.installedVersion) {
+                    version += ' (' + game.version + ')';
+                }
+            }
+
             gamesHtml += '<tr class="games_list_item ' + rowClass + '" id="game_list_item-' + id + '" data-id="' + id + '">' +
-                    '<td>' + gameTitle + '</td><td>' + game.version + '</td>' +
+                    '<td>' + gameTitle + '</td><td>' + version + '</td>' +
                     '<td class="game_size_col">' +
                         '<span class="game_size">' + gameSize + '</span>' +
                         '<div class="game_progress progress" style="display: none;">' +
