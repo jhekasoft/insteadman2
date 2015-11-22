@@ -77,17 +77,19 @@ var ManGui = {
         }
 
         if (game.installed) {
-            if (game.isUpdateExist) {
-                $('#game_install').show();
-            } else {
-                $('#game_install').hide();
-            }
+            $('#game_install').hide();
             $('#game_run').show();
             $('#game_delete').show();
+            if (game.isUpdateExist) {
+                $('#game_update').show();
+            } else {
+                $('#game_update').hide();
+            }
         } else {
             $('#game_install').show();
             $('#game_run').hide();
             $('#game_delete').hide();
+            $('#game_update').hide();
         }
 
         if (game.descurl) {
@@ -121,6 +123,53 @@ var ManGui = {
                 ManGui.render();
             }
         );
+    },
+
+    installGame: function(game, $btn) {
+        manager.installGame(game,
+            function (game, status) {
+
+                var percents = Math.round(status.percents * 100);
+                var gameProgress = $('#game_list_item-' + game.id + ' .game_progress');
+                gameProgress.find('.progress-bar').attr('aria-valuenow', percents);
+                gameProgress.find('.progress-bar').css('width', percents + '%');
+                gameProgress.find('.sr-only').text(bar.format.percentage(status.percents));
+
+                if (!game) {
+                    ManGui.render();
+                }
+            },
+            function (game) {
+                console.log(game);
+                //ManGui.render();
+            },
+            function (game, err) {
+                console.log(game);
+
+                if (!game) {
+                    $btn.button('reset');
+                    ManGui.render();
+
+                    // Downloading error
+                    if (err && "DOWNLOADERR" == err.code) {
+                        return ManGui.showError(t("Installation error"), t("Download has failed. Please check your connection."));
+                    }
+                    return ManGui.showError(t("Installation error"), t("Installation has failed. Please check INSTEAD command in settings."));
+                }
+
+                var percents = 100;
+                var gameProgress = $('#game_list_item-' + game.id + ' .game_progress');
+                gameProgress.find('.progress-bar').attr('aria-valuenow', percents);
+                gameProgress.find('.progress-bar').css('width', percents + '%');
+                gameProgress.find('.sr-only').text(bar.format.percentage(status.percents));
+
+                setTimeout(function () {
+                    $btn.button('reset');
+                    ManGui.render();
+                    ManGui.selectGame(game.id, $('#game_list_item-' + game.id));
+                }, 200);
+            }
+        )
     },
 
     confirmDeletion: function(gameId) {
@@ -332,60 +381,6 @@ var ManGui = {
     }
 };
 
-$('#game_install').click(function () {
-    var gameId = $(this).parents('#game_block').data('game_id');
-    var game = globalGamesList[gameId];
-    $('#game_list_item-' + gameId + ' .game_size').hide();
-    $('#game_list_item-' + gameId + ' .game_progress').show();
-
-    var $btn = $(this).button('loading');
-
-    manager.installGame(game,
-        function (game, status) {
-
-            var percents = Math.round(status.percents * 100);
-            var gameProgress = $('#game_list_item-' + gameId + ' .game_progress');
-            gameProgress.find('.progress-bar').attr('aria-valuenow', percents);
-            gameProgress.find('.progress-bar').css('width', percents + '%');
-            gameProgress.find('.sr-only').text(bar.format.percentage(status.percents));
-
-            if (!game) {
-                ManGui.render();
-            }
-        },
-        function (game) {
-            console.log(game);
-            //ManGui.render();
-        },
-        function (game, err) {
-            console.log(game);
-
-            if (!game) {
-                $btn.button('reset');
-                ManGui.render();
-
-                // Downloading error
-                if (err && "DOWNLOADERR" == err.code) {
-                    return ManGui.showError(t("Installation error"), t("Download has failed. Please check your connection."));
-                }
-                return ManGui.showError(t("Installation error"), t("Installation has failed. Please check INSTEAD command in settings."));
-            }
-
-            var percents = 100;
-            var gameProgress = $('#game_list_item-' + gameId + ' .game_progress');
-            gameProgress.find('.progress-bar').attr('aria-valuenow', percents);
-            gameProgress.find('.progress-bar').css('width', percents + '%');
-            gameProgress.find('.sr-only').text(bar.format.percentage(status.percents));
-
-            setTimeout(function () {
-                $btn.button('reset');
-                ManGui.render();
-                ManGui.selectGame(gameId, $('#game_list_item-' + gameId));
-            }, 200);
-        }
-    )
-});
-
 // i18n begin --------------------------
 var i18nData = manager.configurator.readI18n(manager.configurator.getLang(), true);
 var i18n = require('./lib/gui/modules/i18n')
@@ -409,6 +404,29 @@ $('#filter').click(function () {
     }
 
     ManGui.redrawGui();
+});
+
+$('#game_update').click(function () {
+    var gameId = $(this).parents('#game_block').data('game_id');
+    var game = globalGamesList[gameId];
+
+    var $btn = $(this).button('loading');
+    manager.deleteGame(game, function(game) {
+        if (game) {
+            ManGui.installGame(game, $btn);
+        }
+    });
+});
+
+$('#game_install').click(function () {
+    var gameId = $(this).parents('#game_block').data('game_id');
+    var game = globalGamesList[gameId];
+    $('#game_list_item-' + gameId + ' .game_size').hide();
+    $('#game_list_item-' + gameId + ' .game_progress').show();
+
+    var $btn = $(this).button('loading');
+
+    ManGui.installGame(game, $btn);
 });
 
 $('#game_run').click(function () {

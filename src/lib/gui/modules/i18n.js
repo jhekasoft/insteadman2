@@ -11,6 +11,7 @@ module.exports = {
             {id: 'filter_language', attr: 'data-label'},
             {id: 'repository_update', attr: 'data-loading-text'},
             {id: 'game_install', attr: 'data-loading-text'},
+            {id: 'game_update', attr: 'data-loading-text'},
             {id: 'game_confirm_delete', attr: 'data-loading-text'},
             {id: 'settings_save', attr: 'data-loading-text'},
             {id: 'settings_about_check_update', attr: 'data-loading-text'},
