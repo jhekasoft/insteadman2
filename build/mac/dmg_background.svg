@@ -38,15 +38,15 @@
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
-       id="filter6465"
-       x="-0.15057035"
-       width="1.3011407"
-       y="-0.28905107"
-       height="1.5781021">
+       id="filter8392"
+       x="-0.14812265"
+       width="1.2962453"
+       y="-0.27664877"
+       height="1.5532975">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="8.5677966"
-         id="feGaussianBlur6467" />
+         stdDeviation="8.6013269"
+         id="feGaussianBlur8394" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -56,9 +56,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3617576"
-     inkscape:cx="310.5731"
-     inkscape:cy="814.07685"
+     inkscape:zoom="1.9258161"
+     inkscape:cx="360.64718"
+     inkscape:cy="827.38728"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -66,7 +66,8 @@
      inkscape:window-height="851"
      inkscape:window-x="0"
      inkscape:window-y="1"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:object-paths="false" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -75,7 +76,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -93,11 +94,17 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:#8fceff;fill-rule:evenodd;opacity:1;fill-opacity:1;stroke:#00599d;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 316.68785,241.27746 -85.1587,0.51926 0.51926,29.59784 83.60092,0.51926 0,19.7319 52.4453,-32.71341 -51.40678,-38.42527 z"
+       style="opacity:1;fill:#8fceff;fill-opacity:1;fill-rule:evenodd;stroke:#00599d;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 316.68785,241.27746 c 0,0 -83.18538,-2.66034 -85.1587,0.51926 -3.8492,6.20222 -3.77993,27.8252 0.51926,29.59784 5.66705,2.33663 83.60092,0.51926 83.60092,0.51926 0,0 -0.66505,15.22194 0,19.7319 1.37807,9.34521 50.73701,-22.17456 52.4453,-32.71341 -0.96505,-9.53984 -51.40678,-48.94543 -51.40678,-38.42527 z"
        id="path3401"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccc" />
+       sodipodi:nodetypes="csscscsc" />
+    <path
+       sodipodi:nodetypes="cccccccc"
+       inkscape:connector-curvature="0"
+       id="path6095"
+       d="m 316.68785,241.27746 -85.1587,0.51926 0.51926,29.59784 83.60092,0.51926 0,19.7319 52.4453,-32.71341 -51.40678,-38.42527 z"
+       style="display:none;opacity:1;fill:#8fceff;fill-opacity:1;fill-rule:evenodd;stroke:#00599d;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot3405"
@@ -112,10 +119,10 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'.Damascus PUA';-inkscape-font-specification:'.Damascus PUA'" /></flowRegion><flowPara
          id="flowPara3411"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hiragino Maru Gothic Pro';-inkscape-font-specification:'Hiragino Maru Gothic Pro'">InsteadMan</flowPara></flowRoot>    <path
-       sodipodi:nodetypes="cccccccc"
+       sodipodi:nodetypes="csscscsc"
        inkscape:connector-curvature="0"
-       id="path6095"
-       d="m 316.68785,241.27746 -85.1587,0.51926 0.51926,29.59784 83.60092,0.51926 0,19.7319 52.4453,-32.71341 -51.40678,-38.42527 z"
-       style="fill:#8fceff;fill-rule:evenodd;opacity:1;fill-opacity:1;stroke:#00599d;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter6465)" />
+       id="path8142"
+       d="m 316.68785,241.27746 c 0,0 -83.18538,-2.66034 -85.1587,0.51926 -3.8492,6.20222 -3.77993,27.8252 0.51926,29.59784 5.66705,2.33663 83.60092,0.51926 83.60092,0.51926 0,0 -0.66505,15.22194 0,19.7319 1.37807,9.34521 50.73701,-22.17456 52.4453,-32.71341 -0.96505,-9.53984 -51.40678,-48.94543 -51.40678,-38.42527 z"
+       style="opacity:1;fill:#8fceff;fill-opacity:1;fill-rule:evenodd;stroke:#00599d;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter8392)" />
   </g>
 </svg>
