@@ -165,6 +165,7 @@ var ManGui = {
 
                 setTimeout(function () {
                     $btn.button('reset');
+                    $btn.button('reset');
                     ManGui.render();
                     ManGui.selectGame(game.id, $('#game_list_item-' + game.id));
                 }, 200);
@@ -240,7 +241,7 @@ var ManGui = {
                 gameSize = bar.format.storage(game.size).replace(/(.*)(\s)(.*)$/, '$1&nbsp;$3');
             }
 
-            var version = game.version;
+            var version = game.version || "";
             if (game.isUpdateExist) {
                 version = game.installedVersion;
                 if (game.version != game.installedVersion) {
