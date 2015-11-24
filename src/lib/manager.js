@@ -183,6 +183,13 @@ class Manager {
         var downloadedRepositoriesCount = 0;
         console.log([repositories, repositoriesPath]);
 
+        var endRepositoryDownload = function () {
+            downloadedRepositoriesCount++;
+            if (downloadedRepositoriesCount >= repositories.length && endDownloadingCallback) {
+                endDownloadingCallback(true);
+            }
+        };
+
         repositories.forEach(function(repository) {
             var url = repository.url;
             var filename = repository.name + ".xml";
@@ -209,24 +216,16 @@ class Manager {
 
                 file.on('finish', function () {
                     file.close(function () {
-                        downloadedRepositoriesCount++;
-                        if (downloadedRepositoriesCount >= repositories.length) {
-                            if (endDownloadingCallback) endDownloadingCallback(true);
-                        }
+                        endRepositoryDownload();
                     });
                 });
             }).on('error', function (err) {
                 if (bar) bar.cancel();
                 fs.unlink(repositoriesPath + filename);
 
-                // TODO: fix code duplicate
-                downloadedRepositoriesCount++;
-                if (downloadedRepositoriesCount >= repositories.length) {
-                    if (endDownloadingCallback) endDownloadingCallback(true);
-                }
-
                 console.error(err);
                 downloadStatusCallback(repository, false);
+                endRepositoryDownload();
             });
         });
 
@@ -445,7 +444,7 @@ class Manager {
             res.on('end', function() {
                 var result = null;
                 try {
-                    var result = JSON.parse(body);
+                    result = JSON.parse(body);
                 } catch (e) {
                     return callback('last');
                 }
