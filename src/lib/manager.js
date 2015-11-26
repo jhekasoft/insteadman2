@@ -237,7 +237,7 @@ class Manager {
         var command = '"' + interpreterCommand + '" -install "' + gameFilepath + '" -quit';
         console.log('Run command: ' + command);
 
-        childProcess.exec(command, function(error, stdout, stderr) {
+        childProcess.exec(command, function(error) {
             if (error) {
                 if (callback) callback(false);
             } else {
@@ -309,7 +309,7 @@ class Manager {
         var command = '"' + interpreterCommand + '" -game "' + gameName + '"';
         console.log('Run command: ' + command);
 
-        childProcess.exec(command, function(error, stdout, stderr) {
+        childProcess.exec(command, function(error) {
             if (error) {
                 if (callback) callback(false);
             } else {
@@ -360,7 +360,7 @@ class Manager {
         try {
             stat = fs.statSync(gamePath);
         } catch (err) {
-            var gamePath = this.configurator.getGamesPath() + game.name + ".idf";
+            gamePath = this.configurator.getGamesPath() + game.name + ".idf";
             try {
                 stat = fs.statSync(gamePath);
             } catch (err) {
