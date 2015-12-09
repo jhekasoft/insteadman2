@@ -3,11 +3,11 @@ AppName=InsteadMan
 AppVerName=InsteadMan 2.0.1
 DefaultDirName={pf}\InsteadMan
 DefaultGroupName=Games
-UninstallDisplayIcon={app}\insteadman.exe
+UninstallDisplayIcon={app}\InsteadMan.exe
 OutputDir=.\temp
 OutputBaseFilename=insteadman-2.0.1
 AllowNoIcons=true
-SetupIconFile=..\..\src\resources\images\logo.ico
+SetupIconFile=..\..\src\resources\imageslogo.ico
 ChangesAssociations=yes
 
 [Languages]
@@ -27,11 +27,11 @@ RmSettingsMsg=Would you like to remove settings?
 Name: desktopicon; Description: {cm:CreateDesktopIcon}
 
 [Run]
-Filename: {app}\insteadman.exe; Description: {cm:LaunchGame}; WorkingDir: {app}; Flags: postinstall
+Filename: {app}\InsteadMan.exe; Description: {cm:LaunchGame}; WorkingDir: {app}; Flags: postinstall
 
 [Icons]
-Name: {commondesktop}\InsteadMan; Filename: {app}\insteadman.exe; WorkingDir: {app}; Tasks: desktopicon
-Name: {group}\InsteadMan; Filename: {app}\insteadman.exe; WorkingDir: {app}
+Name: {commondesktop}\InsteadMan; Filename: {app}\InsteadMan.exe; WorkingDir: {app}; Tasks: desktopicon
+Name: {group}\InsteadMan; Filename: {app}\InsteadMan.exe; WorkingDir: {app}
 Name: {group}\{cm:UninstallMsg}; Filename: {uninstallexe}
 
 [UninstallDelete]

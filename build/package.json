@@ -20,7 +20,8 @@
     "url": "https://github.com/jhekasoft/insteadman/issues"
   },
   "homepage": "https://github.com/jhekasoft/insteadman#readme",
-  "devDependencies": {
-    "nw-builder": "^2.1.0"
+  "dependencies": {
+    "nw-builder": "^2.1.0",
+    "fs-extra": "^0.26.2"
   }
 }

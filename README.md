@@ -28,34 +28,39 @@ Run in `src` dir:
 path/to/nwjs .
 ```
 
-Distribution
+Building and distribution
 -------------
+
+On any OS. Go to the `build` directory in console and install npm packages:
+
+```
+npm install
+```
+
+Download, extract and copy MacOS X INSTEAD interpreter to the `build/mac/temp/Instead.app/` directory,
+
+Windows INSTEAD interpreter files to the `build/windows/temp/Instead/` (`sdl-instead.exe`, `stead`, `themes`, etc.)
+
+Then build for all the OS:
+
+```
+node build.js
+```
+
+We have built results in `build/nw-builder/InsteadMan/`.
 
 ### GNU/Linux
 
-**1. Pack `src` content to the ZIP archive with name `app.nw`**
+UNIX-like OS or OS with GNU utils.
+Compress `build/nw-builder/InsteadMan/linux32` and `build/nw-builder/InsteadMan/linux64` to the tar.gz like:
 
 ```
-zip -r app.nw .
-```
-
-**2. Run in directory with nw**
-
-```
-cat nw app.nw > insteadman && chmod +x insteadman
-```
-
-**3. Compress it**
-
-```
-tar -zcvf insteadman_2.0.1.tar.gz insteadman
+tar -zcvf insteadman_2.0.1.tar.gz dir
 ```
 
 ### Mac OS X
 
-**1. Create InsteadMan.app in the `build/mac` directory.**
-
-**2. Build `dmg`-package**
+Only on MacOS X. Build `dmg`-package
 
 ```
 npm install -g appdmg
@@ -69,12 +74,10 @@ appdmg dmg.json InsteadMan-2.0.1.dmg
 
 ### Windows
 
-**1. Pack `src` content to the ZIP archive with name `app.nw`**
+All OS. Zip `build/nw-builder/InsteadMan/win32`.
 
-**2. Run in directory witn `nw.exe`**
-
-```
-copy /b nw.exe+app.nw instead.exe
-```
+Only on Windows. Create installer in the InnoSetup (32 bit, multilingual) with script
+`/Users/jheka/app/insteadman/build/windows/setup.iss` (you should have complete `insteadman` directory with built
+results).
 
 ![InsteadMan](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/logo.png "InsteadMan")
