@@ -7,7 +7,7 @@ UninstallDisplayIcon={app}\insteadman.exe
 OutputDir=.\temp
 OutputBaseFilename=insteadman-2.0.1
 AllowNoIcons=true
-SetupIconFile=icon.ico
+SetupIconFile=..\..\src\resources\images\logo.ico
 ChangesAssociations=yes
 
 [Languages]
@@ -15,7 +15,7 @@ Name: en; MessagesFile: compiler:Default.isl
 Name: ru; MessagesFile: compiler:Languages\Russian.isl
 
 [Files]
-Source: InsteadMan_Windows\*; DestDir: {app}; Flags: replacesameversion recursesubdirs
+Source: ..\nw-builder\InsteadMan\win32\*; DestDir: {app}; Flags: replacesameversion recursesubdirs
 
 [CustomMessages]
 CreateDesktopIcon=Create a &desktop icon
