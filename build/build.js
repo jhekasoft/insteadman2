@@ -31,7 +31,22 @@ nw.build().then(function () {
   fs.copySync(winInsteadPath, winInsteadManPath);
   console.log('Coping done.');
 
-  console.log('all done!');
+  console.log('GNU/Linux changes...');
+  var gnulinInsteadManPathes = {
+    '32': './nw-builder/InsteadMan/linux32/',
+    '64': './nw-builder/InsteadMan/linux64/'
+  };
+  var gnulinBuildPath = './linux/';
+
+  for (var platform in gnulinInsteadManPathes) {
+    fs.renameSync(gnulinInsteadManPathes[platform] + '/InsteadMan', gnulinInsteadManPathes[platform] + 'insteadman');
+    fs.copySync(gnulinBuildPath + 'icon.png', gnulinInsteadManPathes[platform] + 'icon.png');
+    fs.copySync(gnulinBuildPath + 'createdesktopfile', gnulinInsteadManPathes[platform] + 'createdesktopfile');
+    fs.copySync(gnulinBuildPath + 'README', gnulinInsteadManPathes[platform] + 'README');
+  }
+  console.log('GNU/Linux changes done.');
+
+  console.log('All done!');
 }).catch(function (error) {
   console.error(error);
 });

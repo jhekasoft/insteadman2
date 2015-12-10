@@ -1,6 +1,7 @@
 {
-  "last_version": "2.0.1",
-  "download_link": "http://instead.club/",
-  "release_notes": "First beta version!<br><strong>It's awesome!</strong>",
-  "release_notes_ru": "Первая бета-версия!<br><strong>Это нечто!</strong>"
+  "last_version": "2.0.5",
+  "download_link": "https://github.com/jhekasoft/insteadman/releases",
+  "release_notes": "Many small improvements.",
+  "release_notes_ru": "Множество небольших улучшений.",
+  "release_notes_uk": "Безліч невеликих поліпшень."
 }

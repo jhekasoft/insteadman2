@@ -1,5 +1,5 @@
 ![InsteadMan](https://raw.githubusercontent.com/jhekasoft/insteadman/master/src/resources/images/logo32x32.png "InsteadMan") InsteadMan
-===========
+==============
 
 Manager for INSTEAD interpreter. Version 2.
 Old version is [here](https://github.com/jhekasoft/instead-manager).
@@ -29,7 +29,7 @@ path/to/nwjs .
 ```
 
 Building and distribution
--------------
+--------------------------
 
 On any OS. Go to the `build` directory in console and install npm packages:
 
@@ -55,7 +55,7 @@ UNIX-like OS or OS with GNU utils.
 Compress `build/nw-builder/InsteadMan/linux32` and `build/nw-builder/InsteadMan/linux64` to the tar.gz like:
 
 ```
-tar -zcvf insteadman_2.0.1.tar.gz dir
+tar -zcvf insteadman_2.0.1-x86-64.tar.gz dir
 ```
 
 ### Mac OS X
