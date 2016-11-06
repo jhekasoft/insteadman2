@@ -7,7 +7,7 @@ Old version is [here](https://github.com/jhekasoft/instead-manager).
 Download
 ---------
 
-Please download releases here: [http://instead.club](http://instead.club).
+Please download releases here: [http://1000.tech/en/insteadman](http://1000.tech/en/insteadman).
 
 ![InsteadMan GUI](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot.png "InsteadMan GUI")
 
