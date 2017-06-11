@@ -461,14 +461,25 @@ class Manager {
     }
 
     addDirectoryGameData(game) {
-        var gamePath = this.configurator.getGamesPath() + game.name;
-        var mainLuaFilePath = path.join(gamePath, 'main.lua');
+        let gamePath = this.configurator.getGamesPath() + game.name;
+        let mainLuaFilePath = path.join(gamePath, 'main.lua'); // STEAD2 main file path
+        let main3LuaFilePath = path.join(gamePath, 'main3.lua'); // STEAD3 main file path
+        let mainLuaContent = null;
 
         try {
-            var mainLuaContent = fs.readFileSync(mainLuaFilePath, 'utf8');
+            mainLuaContent = fs.readFileSync(mainLuaFilePath, 'utf8');
         } catch (err) {
-            console.error("Error reading game info from " + mainLuaFilePath);
-            return false;
+            console.error("Error reading game info from " + mainLuaFilePath + ". Try to read STEAD3 main file...");
+        }
+
+        // Try to read STEAD3 main file read
+        if (!mainLuaContent) {
+            try {
+                mainLuaContent = fs.readFileSync(main3LuaFilePath, 'utf8');
+            } catch (err) {
+                console.error("Error reading game info from " + mainLuaFilePath);
+                return false;
+            }
         }
 
         let match = /--\s*\$Name:\s*(.*)\$/i.exec(mainLuaContent);
