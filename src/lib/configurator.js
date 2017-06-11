@@ -268,8 +268,11 @@ class ConfiguratorWin extends Configurator {
     constructor(interpreterFinder, version, locale) {
         super(interpreterFinder, version, locale);
 
-        this.interpreterGamePath = "~/Local Settings/Application Data/instead/games/";
-        this.configPath = "~/Local Settings/Application Data/instead/manager/";
+        // let insteadConfBasePath = "~/Local Settings/Application Data/instead/";
+        let insteadConfBasePath = process.env.LOCALAPPDATA + "/instead/";
+
+        this.interpreterGamePath = insteadConfBasePath + "games/";
+        this.configPath = insteadConfBasePath + "manager/";
 
         this.postConstructor(locale);
     }

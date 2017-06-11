@@ -113,11 +113,14 @@ $('#settings_save').click(function () {
     $('#settings_dialog').modal('hide');
 
     $('#settings_dialog').on('hidden.bs.modal', function (e) {
-        for(module in global.require.cache){
-            if(global.require.cache.hasOwnProperty(module)){
-                delete global.require.cache[module];
-            }
+        for (let [k, v] of Object.entries(global.require.cache)) {
+            delete global.require.cache[k]
         }
+        // for(module in global.require.cache){
+        //     if(global.require.cache.hasOwnProperty(module)){
+        //         delete global.require.cache[module];
+        //     }
+        // }
         location.reload();
     });
 });

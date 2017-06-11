@@ -1,26 +1,26 @@
-global.$ = window.$ = window.jQuery = global.jQuery = require('jquery');
+// global.$ = window.$ = window.jQuery = global.jQuery = require('jquery');
+global.$ = global.jQuery = window.jQuery;
 global.document = document;
 require('bootstrap');
 
 var os = require('os');
 var path = require('path');
-var gui = require('nw.gui');
 var statusBar = require('status-bar');
 var interpreterFinderLib = require('./lib/interpreter_finder');
 var configuratorLib = require('./lib/configurator');
 var managerLib = require('./lib/manager');
 
 var locale = window.navigator.language;
-var version = gui.App.manifest.version;
+var version = nw.App.manifest.version;
 
 if ("win32" == os.platform()) {
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderWin;
     var configurator = new configuratorLib.ConfiguratorWin(insteadInterpreterFinder, version, locale);
     var manager = new managerLib.ManagerWin(configurator);
 } else if ("darwin" == os.platform()) {
-    var mb = new gui.Menu({type:"menubar"});
+    var mb = new nw.Menu({type:"menubar"});
     mb.createMacBuiltin("Insteadman");
-    gui.Window.get().menu = mb;
+    nw.Window.get().menu = mb;
 
     var insteadInterpreterFinder = new interpreterFinderLib.InsteadInterpreterFinderMac;
     var configurator = new configuratorLib.ConfiguratorMac(insteadInterpreterFinder, version, locale);
@@ -454,13 +454,13 @@ $('#game_logo').click(function () {
 $('#game_info_external').click(function () {
     var gameId = $(this).parents('#game_block').data('game_id');
     var game = globalGamesList[gameId];
-    gui.Shell.openExternal(game.descurl);
+    nw.Shell.openExternal(game.descurl);
 });
 
 $('#game_info').click(function () {
     var gameId = $(this).parents('#game_block').data('game_id');
     var game = globalGamesList[gameId];
-    var infoWindow = gui.Window.open(game.descurl, {toolbar: false, focus: true});
+    var infoWindow = nw.Window.open(game.descurl, {toolbar: false, focus: true});
     infoWindow.on ('loaded', function(){
         $(infoWindow.window).keyup(function(e){
             if(e.keyCode == 27){
