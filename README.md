@@ -1,13 +1,14 @@
 ![InsteadMan](https://raw.githubusercontent.com/jhekasoft/insteadman/master/src/resources/images/logo32x32.png "InsteadMan") InsteadMan
 ==============
 
-Manager for INSTEAD interpreter. Version 2.
+Manager for INSTEAD interpreter. Version 2. Official site is here: http://jhekasoft.github.io/insteadman/.
+
 Old version is [here](https://github.com/jhekasoft/instead-manager).
 
 Download
 ---------
 
-Please download releases here: [http://1000.tech/en/insteadman](http://1000.tech/en/insteadman).
+Please download releases here: https://github.com/jhekasoft/insteadman/releases.
 
 ![InsteadMan GUI](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot.png "InsteadMan GUI")
 
