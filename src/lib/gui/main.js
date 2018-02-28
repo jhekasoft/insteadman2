@@ -1,7 +1,7 @@
-// global.$ = window.$ = window.jQuery = global.jQuery = require('jquery');
-global.$ = global.jQuery = window.jQuery;
+//global.$ = window.$ = window.jQuery = global.jQuery = require('jquery');
+global.$ = global.jQuery = window.$ = window.jQuery;
 global.document = document;
-require('bootstrap');
+//require('bootstrap');
 
 var os = require('os');
 var path = require('path');
@@ -536,7 +536,7 @@ if (manager.configurator.canCheckUpdateOnStart()) {
     ManGui.showUpdateChecking(true, null, true);
 }
 
-$(window).load(function () {
+$(window).on('load', function() {
     ManGui.redrawGui();
 });
 

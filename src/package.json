@@ -27,7 +27,7 @@
     "follow-redirects": "*",
     "xml2js": "*",
     "fs-extra": "*",
-    "jquery": "2.x",
+    "jquery": "3.x",
     "bootstrap": "3.x"
   },
   "readme": "../README.md"
