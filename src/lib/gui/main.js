@@ -266,7 +266,7 @@ var ManGui = {
         // About block
         $('#about_version').text(manager.version);
         $('#about_web_page').attr('href', manager.webPage);
-        $('#about_web_page').text(manager.webPage);
+        $('#about_web_page').text(manager.webPageTitle);
 
         // Add version to default game title
         var defaultGameTitle = $("#game_title").data("default-text");

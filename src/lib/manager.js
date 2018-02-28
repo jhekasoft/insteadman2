@@ -14,7 +14,8 @@ var gameClass = require('./models').Game;
 
 class Manager {
     constructor(configurator) {
-        this.webPage = 'http://instead.club';
+        this.webPage = 'http://jhekasoft.github.io/insteadman/';
+        this.webPageTitle = 'jhekasoft.github.io/insteadman/';
         this.updateCheckUrl = 'https://raw.githubusercontent.com/jhekasoft/insteadman/master/version.json';
         if (!(configurator instanceof configuratorClass)) {
             throw "Wrong Configurator instance.";
@@ -59,7 +60,12 @@ class Manager {
 
     getGamesFromFile(filePath) {
         var games = [];
-        var data = fs.readFileSync(filePath);
+        try {
+            var data = fs.readFileSync(filePath);
+        } catch (err) {
+            return games;
+        }
+
         var parser = new xml2js.Parser();
         parser.parseString(data, function (err, result) {
             if (err || !result) return;
