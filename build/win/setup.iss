@@ -15,7 +15,7 @@ Name: en; MessagesFile: compiler:Default.isl
 Name: ru; MessagesFile: compiler:Languages\Russian.isl
 
 [Files]
-Source: ..\nw-builder\InsteadMan\win32\*; DestDir: {app}; Flags: replacesameversion recursesubdirs
+Source: ..\dist\InsteadMan-win-x86\*; DestDir: {app}; Flags: replacesameversion recursesubdirs
 
 [CustomMessages]
 CreateDesktopIcon=Create a &desktop icon

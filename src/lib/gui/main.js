@@ -460,7 +460,7 @@ $('#game_info_external').click(function () {
 $('#game_info').click(function () {
     var gameId = $(this).parents('#game_block').data('game_id');
     var game = globalGamesList[gameId];
-    var infoWindow = nw.Window.open(game.descurl, {toolbar: false, focus: true});
+    var infoWindow = nw.Window.open(game.descurl, {focus: true});
     infoWindow.on ('loaded', function(){
         $(infoWindow.window).keyup(function(e){
             if(e.keyCode == 27){

@@ -36,6 +36,8 @@ builder.build().then(function () {
   const winInsteadPath = buildDir + '/' + win + '/temp/INSTEAD/';
   const winInsteadManPath = distDir + '/' + appName + '-' + win + '-' + x86 + '/';
   fs.copySync(winInsteadPath, winInsteadManPath);
+  fs.removeSync(winInsteadManPath + "unins000.exe");
+  fs.removeSync(winInsteadManPath + "unins000.dat");
   console.log('Coping done.');
 
   console.log('GNU/Linux changes...');

@@ -1,7 +1,7 @@
 {
-  "last_version": "2.0.5",
+  "last_version": "2.1.0",
   "download_link": "http://jhekasoft.github.io/insteadman/#download",
-  "release_notes": "Many small improvements.",
-  "release_notes_ru": "Множество небольших улучшений.",
-  "release_notes_uk": "Безліч невеликих поліпшень."
+  "release_notes": "Fix bugs, add some improvements.",
+  "release_notes_ru": "Пофикшены баги, некоторые улучшения.",
+  "release_notes_uk": "Виправлені баги, деякі покращення."
 }
