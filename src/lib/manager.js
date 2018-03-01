@@ -95,9 +95,23 @@ class Manager {
     }
 
     sortingCompareGameByTitle(gameA, gameB) {
-        var titleA = gameA.title.toLowerCase();
-        var titleB = gameB.title.toLowerCase();
+        let titleA = gameA.title.trim().toLowerCase();
+        let titleB = gameB.title.trim().toLowerCase();
+
         if (titleA == titleB) return 0;
+
+        let urqPrefix = "[urq]"
+        var urqTitleA = null;
+        var urqTitleB = null;
+        if (titleA.indexOf(urqPrefix) == 0) urqTitleA = titleA.replace(urqPrefix, "").trim();
+        if (titleB.indexOf(urqPrefix) == 0) urqTitleB = titleB.replace(urqPrefix, "").trim();
+
+        // Games with [URQ] prefix move to the end
+        if (urqTitleA && !urqTitleB) return 1; else if (!urqTitleA && urqTitleB) return -1;
+        if (urqTitleA && urqTitleB) {
+            if (urqTitleA > urqTitleB) return 1; else return -1;
+        }
+
         if (titleA > titleB) return 1; else return -1;
     }
 
