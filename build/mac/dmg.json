@@ -5,6 +5,6 @@
   "icon-size": 80,
   "contents": [
     { "x": 390, "y": 200, "type": "link", "path": "/Applications" },
-    { "x": 114, "y": 200, "type": "file", "path": "../nw-builder/InsteadMan/osx32/InsteadMan.app" }
+    { "x": 114, "y": 200, "type": "file", "path": "../dist/InsteadMan-mac-x64/InsteadMan.app" }
   ]
 }

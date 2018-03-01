@@ -1,11 +1,11 @@
 [Setup]
 AppName=InsteadMan
-AppVerName=InsteadMan 2.0.5
+AppVerName=InsteadMan 2.1.0
 DefaultDirName={pf}\InsteadMan
 DefaultGroupName=Games
 UninstallDisplayIcon={app}\InsteadMan.exe
 OutputDir=.\temp
-OutputBaseFilename=insteadman-2.0.5
+OutputBaseFilename=insteadman-2.1.0
 AllowNoIcons=true
 SetupIconFile=..\..\src\resources\images\logo.ico
 ChangesAssociations=yes

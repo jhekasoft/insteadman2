@@ -2,8 +2,8 @@
 /mac/temp
 /mac/*.app
 /mac/*.dmg
-/windows/InsteadMan_Windows
-/windows/temp
+/win/InsteadMan_Windows
+/win/temp
 /nwjs/
 /nw-builder/
 /node_modules/

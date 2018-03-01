@@ -1,6 +1,6 @@
 {
   "name": "InsteadMan",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "Manager for INSTEAD interpreter",
   "author": "Evgeniy Efremov aka jhekasoft <jhekasoft@gmail.com>",
   "homepage": "http://instead.club",
@@ -9,6 +9,10 @@
     "type": "git",
     "url": "git://github.com/jhekasoft/insteadman.git"
   },
+  "keywords": [
+    "instead",
+    "insteadman"
+  ],
   "main": "index.html",
   "window": {
     "icon": "resources/images/logo.png",
@@ -30,13 +34,15 @@
     "jquery": "3.x",
     "bootstrap": "3.x"
   },
-  "readme": "../README.md",
   "devDependencies": {
     "nwjs-builder-phoenix": "^1.14.6"
   },
+  "readme": "../README.md",
   "build": {
     "nwVersion": "0.28.3",
     "output": "../build/dist/",
+    "outputPattern": "${NAME}-${PLATFORM}-${ARCH}",
+    "excludes": ["./build.js"],
     "win": {
       "companyName": "jhekasoft",
       "icon": "./resources/images/logo.ico"
@@ -48,9 +54,5 @@
         "CFBundleDocumentTypes": []
       }
     }
-  },
-  "scripts": {
-    "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
-    "start": "run --x86 --mirror https://dl.nwjs.io/ ."
   }
 }
