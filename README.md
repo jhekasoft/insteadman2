@@ -82,3 +82,7 @@ Only on Windows. Create installer in the InnoSetup (32 bit, multilingual) with s
 results).
 
 ![InsteadMan](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/logo.png "InsteadMan")
+
+Changelog
+----------
+See https://github.com/jhekasoft/insteadman/releases.
