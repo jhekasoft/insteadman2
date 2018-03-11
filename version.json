@@ -2,6 +2,6 @@
   "last_version": "2.1.0",
   "download_link": "http://jhekasoft.github.io/insteadman/#download",
   "release_notes": "<ul><li>fixed bug where a game would not install and run on Windows OS;</li><li>changed games sorting: URQ-games at the end;</li><li>fixed other small bugs.</li></ul>",
-  "release_notes_ru": "<ul><li>Поправлен баг, когда нельзя было установить и запустить игру на Windows;</li><li>изменена сортировка игр: игры URQ в конце;</li><li>поправлены другие незначительные баги.</li></ul>",
-  "release_notes_uk": "<ul><li>Виправлен баг, коли неможна було встановити та запустити гру на Windows;</li><li>зменено сортування ігор: ігри URQ у кінці;</li><li>виправлені інші незначні баги.</li></ul>"
+  "release_notes_ru": "<ul><li>поправлен баг, когда нельзя было установить и запустить игру на Windows;</li><li>изменена сортировка игр: игры URQ в конце;</li><li>поправлены другие незначительные баги.</li></ul>",
+  "release_notes_uk": "<ul><li>виправлен баг, коли неможна було встановити та запустити гру на Windows;</li><li>зменено сортування ігор: ігри URQ у кінці;</li><li>виправлені інші незначні баги.</li></ul>"
 }
