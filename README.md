@@ -3,6 +3,8 @@
 
 Manager for INSTEAD interpreter. Version 2. Official site is here: http://jhekasoft.github.io/insteadman/en/.
 
+New version is [here](https://github.com/jhekasoft/insteadman3).
+
 Old version is [here](https://github.com/jhekasoft/instead-manager).
 
 Download
