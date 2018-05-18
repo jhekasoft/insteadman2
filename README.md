@@ -10,11 +10,11 @@ Old version is [here](https://github.com/jhekasoft/instead-manager).
 Download
 ---------
 
-Please download releases here: https://github.com/jhekasoft/insteadman/releases.
+Please download releases here: https://github.com/jhekasoft/insteadman2/releases.
 
-![InsteadMan GUI](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot.png "InsteadMan GUI")
+![InsteadMan GUI](https://github.com/jhekasoft/insteadman2/raw/master/src/resources/images/screenshot.png "InsteadMan GUI")
 
-![InsteadMan GUI GNU/Linux](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/screenshot_gnulinux.png "InsteadMan GUI GNU/Linux")
+![InsteadMan GUI GNU/Linux](https://github.com/jhekasoft/insteadman2/raw/master/src/resources/images/screenshot_gnulinux.png "InsteadMan GUI GNU/Linux")
 
 
 Development run
@@ -83,8 +83,8 @@ Only on Windows. Create installer in the InnoSetup (32 bit, multilingual) with s
 `build/windows/setup.iss` (you should have complete `insteadman` directory with built
 results).
 
-![InsteadMan](https://github.com/jhekasoft/insteadman/raw/master/src/resources/images/logo.png "InsteadMan")
+![InsteadMan](https://github.com/jhekasoft/insteadman2/raw/master/src/resources/images/logo.png "InsteadMan")
 
 Changelog
 ----------
-See https://github.com/jhekasoft/insteadman/releases.
+See https://github.com/jhekasoft/insteadman2/releases.
