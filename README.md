@@ -1,4 +1,4 @@
-![InsteadMan](https://raw.githubusercontent.com/jhekasoft/insteadman/master/src/resources/images/logo32x32.png "InsteadMan") InsteadMan
+![InsteadMan](https://raw.githubusercontent.com/jhekasoft/insteadman2/master/src/resources/images/logo32x32.png "InsteadMan") InsteadMan
 ==============
 
 Manager for INSTEAD interpreter. Version 2. Official site is here: http://jhekasoft.github.io/insteadman/en/.
